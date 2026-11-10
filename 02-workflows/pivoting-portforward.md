@@ -50,4 +50,4 @@ socat TCP-LISTEN:8081,fork TCP:127.0.0.1:8080 &
 ## Пастки
 - chisel-клієнт і сервер мають збігатись версіями.
 - Не плутати local (`-L`) і remote (`R:`) напрями.
-- Усі внутрішні порти → [tracker](../07-koth-strategy/findings-tracker.md).
+- Усі внутрішні порти → tracker.

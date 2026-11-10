@@ -55,4 +55,4 @@ mongosh --host $TARGET                       # MongoDB 27017: show dbs; use <db>
 
 ## Загальний принцип
 Для кожного сервісу: (1) banner/версія → `searchsploit`; (2) anon/default creds; (3) читабельні файли/дані; (4) список юзерів для перевірки кредів деінде.
-Усе → [findings-tracker](../07-koth-strategy/findings-tracker.md).
+Усе → findings-tracker.

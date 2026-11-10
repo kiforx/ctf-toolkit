@@ -19,7 +19,7 @@
 1. Підготувати середовище й інструменти заздалегідь — [pre-game checklist](00-setup/pre-game-checklist.md).
 2. Підняти мережу/VPN, перевірити доступ до цілі — [network setup](00-setup/vpn-wireguard.md).
 3. Відкрити [Master Roadmap](01-roadmaps/MASTER-ROADMAP.md), запустити розвідку.
-4. Усі знахідки одразу фіксувати в [findings-tracker](07-koth-strategy/findings-tracker.md).
+4. Усі знахідки (порти, креди, прапорці) одразу фіксувати у спільному нотатнику команди.
 
 ---
 
@@ -58,13 +58,7 @@
 
 ---
 
-## Командна гра (King of the Hill)
-
-Матеріали для командного формату: розподіл часу й ролей, фіксація знахідок, дисципліна.
-
-[План на 5 годин](07-koth-strategy/5-hour-plan.md) · [ролі в команді](07-koth-strategy/team-roles.md) · [findings-tracker](07-koth-strategy/findings-tracker.md) · [операційний checklist](07-koth-strategy/operational-checklist.md)
-
-### Формат прапорця (поточна ціль)
+## Формат прапорця (поточна ціль)
 ```
 best + CTF із шумом [-_.] + {payload} + :<номер>
 приклад:  be_s_t_CTF-_{h1dd3n_r0b0ts_txt}:1

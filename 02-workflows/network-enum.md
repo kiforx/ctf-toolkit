@@ -44,7 +44,7 @@ sudo nmap -sU --top-ports 50 -T4 $TARGET -oN nmap-udp.txt
 | 3389/5985/135 | [windows-enum](../06-windows/windows-enum.md) |
 
 ## Нотатки в tracker
-Кожен порт+сервіс+версія → [findings-tracker](../07-koth-strategy/findings-tracker.md), щоб уникнути повторного скану.
+Кожен порт+сервіс+версія → findings-tracker, щоб уникнути повторного скану.
 
 ## Пастки
 - `filtered` на все → VPN не піднятий або потрібен `-Pn`.

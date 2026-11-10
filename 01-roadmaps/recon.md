@@ -40,4 +40,4 @@ sudo nmap -sU --top-ports 50 -T4 $TARGET -oN nmap-udp.txt
 ## Часті помилки
 - Зупинитись на `-sC -sV` без `-p-` → пропущений порт = пропущені прапорці.
 - Не пересканувати `localhost` зсередини після доступу (`ss -tlnp`).
-- Не записати порти в [tracker](../07-koth-strategy/findings-tracker.md) → дубльований скан.
+- Не записати порти в tracker → дубльований скан.

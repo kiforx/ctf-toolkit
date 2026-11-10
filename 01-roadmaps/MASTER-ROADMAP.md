@@ -10,8 +10,7 @@
 ## 0. Підготовка
 - [ ] VPN піднятий (`sudo wg show` → `latest handshake`) · [vpn](../00-setup/vpn-wireguard.md)
 - [ ] `ping -c2 <TARGET>` відповідає
-- [ ] Відкрито [findings-tracker](../07-koth-strategy/findings-tracker.md) — усі знахідки туди
-- [ ] Ролі розподілені · [team-roles](../07-koth-strategy/team-roles.md)
+- [ ] Спільний нотатник для знахідок відкрито — усі порти/креди/прапорці туди
 
 ---
 
@@ -117,7 +116,6 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 ## 6. Цикл (поки є час)
 ```
 Новий доступ/креди/порт?  → так → повернення до відповідного enum (крок 1/2/4)
-                          → ні  → ще раз flag-hunt + перечитати tracker команди
-Затик на векторі > 20хв?  → позначити rabbit hole, передати іншому, взяти інший вектор
+                          → ні  → ще раз flag-hunt + перечитати спільний нотатник
+Затик на одному векторі надовго? → позначити rabbit hole, узяти інший вектор
 ```
-Контроль часу: [5-hour-plan](../07-koth-strategy/5-hour-plan.md). Дисципліна: [operational-checklist](../07-koth-strategy/operational-checklist.md).
