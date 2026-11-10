@@ -10,6 +10,7 @@
 ## 0. Підготовка
 - [ ] VPN піднятий (`sudo wg show` → `latest handshake`) · [vpn](../00-setup/vpn-wireguard.md)
 - [ ] `ping -c2 <TARGET>` відповідає
+- [ ] Listener для revshell — на VPN-адресі `10.8.N.x` (там, де піднятий VPN), інакше shell не дійде
 - [ ] Спільний нотатник для знахідок відкрито — усі порти/креди/прапорці туди
 
 ---
@@ -21,7 +22,7 @@
 # A) Швидкий — щоб одразу почати працювати
 nmap -sC -sV -T4 --open <TARGET> -oN nmap-quick.txt
 # B) Повний (паралельно, у фоні)
-nmap -p- -T4 --open <TARGET> -oN nmap-allports.txt
+nmap -p- -T4 --min-rate 2000 --open <TARGET> -oN nmap-allports.txt
 # C) UDP топ (третій термінал)
 sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 ```
@@ -33,7 +34,7 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 | **21** FTP | [service-enum: FTP](../02-workflows/service-enum.md#ftp) — anonymous |
 | **22** SSH | Поки мимо. Повернення з кредами ([lateral](../02-workflows/lateral-movement.md)) |
 | **139/445** SMB | [service-enum: SMB](../02-workflows/service-enum.md#smb) + [smb cheatsheet](../03-cheatsheets/smb-enum.md) |
-| **3306/5432/6379/27017** DB/Redis | [service-enum: DB](../02-workflows/service-enum.md#бази-даних) — default creds |
+| **3306/5432/6379/27017** DB/Redis | [databases cheatsheet](../03-cheatsheets/databases.md) — enum/dump/outfile/Redis-foothold |
 | **3389/5985** RDP/WinRM | Windows → [windows-enum](../06-windows/windows-enum.md) |
 | Нетиповий порт | `nc -nv <TARGET> <PORT>`, banner → `searchsploit <сервіс версія>` |
 
@@ -46,17 +47,18 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 
 Порядок: `whatweb <url>` → перегляд сайту + **View Source** → `gobuster/ffuf` директорії → форми вводу/параметри/upload/login.
 
-### Розгалуження:
-| Знайдено | → |
-|---|---|
-| Login-форма | default creds (admin:admin) → [SQLi bypass](../03-cheatsheets/sqlmap-sqli.md) |
-| Параметр `?file=`/`?page=` | [LFI/traversal](../03-cheatsheets/lfi-traversal.md) — `/etc/passwd`, конфіги, ключі |
-| Параметр `?cmd=`/ping-форма | [command injection](../03-cheatsheets/command-injection.md) |
-| Форма upload | [webshell](../03-cheatsheets/webshells-revshells.md) |
-| Параметр з URL | SSRF → [web-vulns](../04-techniques/web-vulns-overview.md) |
-| CMS (WordPress/Joomla) | версія → `searchsploit`, вразливі плагіни |
-| `.git/` `.bak` `~` | завантажити й читати сорси/креди |
-| Нічого | ffuf з розширеннями (`.php,.txt,.bak,.zip`), vhosts, інші порти |
+### Розгалуження (→ готовий потік команд):
+| Знайдено | Деталі | Повний ланцюжок |
+|---|---|---|
+| Login-форма | default creds → [SQLi bypass](../03-cheatsheets/sqlmap-sqli.md) | [chain: SQLi](../03-cheatsheets/exploit-chains.md#sqli) |
+| Параметр `?file=`/`?page=` | [LFI/traversal](../03-cheatsheets/lfi-traversal.md) | [chain: LFI→RCE](../03-cheatsheets/exploit-chains.md#lfi) |
+| Параметр `?cmd=`/ping-форма | [command injection](../03-cheatsheets/command-injection.md) | [chain: cmd-inj](../03-cheatsheets/exploit-chains.md#cmdi) |
+| Форма upload | [webshell](../03-cheatsheets/webshells-revshells.md) | [chain: upload](../03-cheatsheets/exploit-chains.md#upload) |
+| SQLi у `id=1` | [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) | [chain: SQLi](../03-cheatsheets/exploit-chains.md#sqli) |
+| Параметр з URL | SSRF → [web-vulns](../04-techniques/web-vulns-overview.md) | — |
+| CMS (WordPress/Joomla) | версія → `searchsploit`, вразливі плагіни | — |
+| `.git/` `.bak` `~` | завантажити й читати сорси/креди | — |
+| Нічого | ffuf з розширеннями (`.php,.txt,.bak,.zip`), vhosts, інші порти | — |
 
 ---
 
@@ -78,7 +80,7 @@ python3 -c 'import pty;pty.spawn("/bin/bash")'  # Ctrl+Z; stty raw -echo; fg; ex
 ## 4. Post-Exploitation (без рута) <a id="4-post-exploitation"></a>
 → детально: [post-exploitation roadmap](post-exploitation.md)
 
-Швидкий автозбір:
+Швидкий автозбір (готовий блок — [linux-quick: швидкі вектори](../03-cheatsheets/linux-quick.md)):
 ```bash
 id; sudo -l; cat ~/.bash_history; ls -la ~ /home/*; env
 ss -tlnp 2>/dev/null                 # внутрішні сервіси на localhost

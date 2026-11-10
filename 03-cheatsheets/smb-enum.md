@@ -25,6 +25,14 @@ smbclient -L //$TARGET/ -N                       # список шар, без �
 smbclient //$TARGET/share -N                     # зайти анонімно
 smbclient //$TARGET/share -U user                # з юзером
 # у сесії:  ls ; cd dir ; get file ; mget * ; prompt off ; recurse on
+# викачати ВСЮ шару рекурсивно одним рухом:
+smbclient //$TARGET/share -N -c 'prompt OFF; recurse ON; mget *'
+```
+
+## RID brute (юзери, коли enum шар закритий)
+```bash
+netexec smb $TARGET -u guest -p '' --rid-brute        # перелік через RID
+netexec smb $TARGET -u '' -p '' --rid-brute           # спробувати null
 ```
 
 ## smbmap (права доступу)
