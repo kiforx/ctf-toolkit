@@ -44,6 +44,7 @@ redis-cli -h $TARGET                        # Redis 6379 (часто без ав
 mongosh --host $TARGET                       # MongoDB 27017: show dbs; use <db>; db.<col>.find()
 ```
 Усередині БД: `SHOW DATABASES; USE x; SHOW TABLES; SELECT * FROM users;` — креди, нотатки, **прапорці** (зразки `sql_r0w_b1ll1ng`, `sql1_un10n_dump`).
+→ повний enum/дамп/файли/RCE по рушіях (MySQL/Postgres/MSSQL/Redis/Mongo): [databases cheatsheet](../03-cheatsheets/databases.md).
 
 ## Інші
 | Порт | Сервіс | Швидка дія |

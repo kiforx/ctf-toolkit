@@ -4,6 +4,8 @@
 **Коли:** є LFI/RCE/upload/SQLi/креди.
 ← [MASTER](MASTER-ROADMAP.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [lateral](../02-workflows/lateral-movement.md)
 
+> Готові повні ланцюжки «вхід → shell» одним місцем: [exploit-chains](../03-cheatsheets/exploit-chains.md).
+
 ---
 
 ## Шляхи до доступу

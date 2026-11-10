@@ -61,7 +61,7 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 ---
 
 ## 3. Initial Access
-→ детально: [initial-access roadmap](initial-access.md)
+→ детально: [initial-access roadmap](initial-access.md) · готові повні ланцюжки: [exploit-chains](../03-cheatsheets/exploit-chains.md)
 
 Мета — виконання команд або валідні креди. Варіанти: webshell → reverse shell ([revshells](../03-cheatsheets/webshells-revshells.md)), SSH зі знайденими кредами, авторизований доступ до панелі.
 
@@ -119,3 +119,13 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
                           → ні  → ще раз flag-hunt + перечитати спільний нотатник
 Затик на одному векторі надовго? → позначити rabbit hole, узяти інший вектор
 ```
+
+---
+
+## Довідники (швидкий доступ)
+**Cheatsheets:** [exploit-chains (повні потоки)](../03-cheatsheets/exploit-chains.md) · [nmap](../03-cheatsheets/nmap.md) · [ffuf/gobuster](../03-cheatsheets/ffuf-gobuster.md) · [curl](../03-cheatsheets/curl.md) · [netcat/socat](../03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) · [databases](../03-cheatsheets/databases.md) · [LFI/traversal](../03-cheatsheets/lfi-traversal.md) · [command injection](../03-cheatsheets/command-injection.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [SMB](../03-cheatsheets/smb-enum.md) · [grep/find](../03-cheatsheets/grep-find.md) · [linux-quick](../03-cheatsheets/linux-quick.md)
+
+**Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md)
+
+**Інше:** [tools (бінарники)](../tools/README.md) · [Windows](../06-windows/windows-enum.md) · [файли/передача](../02-workflows/file-transfer.md)
+

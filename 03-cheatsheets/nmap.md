@@ -30,15 +30,29 @@ nmap -Pn $TARGET                                  # не пінгувати (ц�
 
 ## NSE-скрипти (цільові)
 ```bash
-nmap -p21 --script ftp-anon $TARGET
-nmap -p445 --script smb-enum-shares,smb-enum-users,smb-os-discovery $TARGET
-nmap -p80 --script http-enum,http-title $TARGET
-nmap --script vuln $TARGET          # відомі вразливості (повільно)
+nmap -p21  --script ftp-anon $TARGET                                   # анонімний FTP
+nmap -p445 --script smb-enum-shares,smb-enum-users,smb-os-discovery $TARGET  # SMB шари/юзери
+nmap -p445 --script smb-vuln* $TARGET                                   # відомі SMB CVE
+nmap -p80,443 --script http-enum,http-title,http-headers $TARGET        # веб-огляд
+nmap -p80 --script http-shellshock --script-args uri=/cgi-bin/x $TARGET # shellshock
+nmap -p3306 --script mysql-empty-password,mysql-info $TARGET            # MySQL дефолт
+nmap -p6379 --script redis-info $TARGET                                  # Redis
+nmap -p25  --script smtp-enum-users,smtp-commands $TARGET               # SMTP юзери
+nmap -sU -p161 --script snmp-info,snmp-brute $TARGET                     # SNMP
+nmap --script vuln $TARGET          # усі відомі вразливості (повільно)
+```
+
+## Корисні one-liner-и
+```bash
+nmap -p- --min-rate 5000 -T4 $TARGET -oG - | grep '/open/'   # усі порти, grep-friendly
+nmap -sn 10.0.N0.0/24                                        # хто живий у підмережі (якщо дозволено)
+nmap -Pn -n -p- -oA scan $TARGET                             # без DNS, усі формати (scan.*)
 ```
 
 ## Читання виводу
 - `open` — робочий; `filtered` — фаєрвол/VPN → `-Pn`; `closed` — нема сервісу.
 - Версія → `searchsploit <продукт версія>`.
+- `-oG`/`-oA` зручні, щоб швидко витягти порти в нотатник або згодувати іншим тулам.
 
 ## Пастка
 Найчастіша помилка — відсутній `-p-`. Сервіс на 8080/50000 без нього невидимий.

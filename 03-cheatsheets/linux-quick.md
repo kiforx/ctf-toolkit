@@ -52,6 +52,22 @@ strings binary | grep -i pass                  # рядки в бінарник�
 base64 -d <<< 'aWQ='                           # декод
 ```
 
+## Швидкі вектори (quick wins) — прогнати одразу
+```bash
+sudo -l 2>/dev/null                               # дозволені команди → escape
+find / -perm -4000 -type f 2>/dev/null            # SUID
+getcap -r / 2>/dev/null                           # capabilities
+find / -writable -type f 2>/dev/null | grep -vE '^/proc|^/sys'   # файли з записом
+find / -writable -type d 2>/dev/null | grep -vE '^/proc|^/tmp'   # теки з записом
+cat /etc/crontab; ls -la /etc/cron.*              # cron (+ pspy64 без рута)
+# креди у файлах
+grep -rEi 'passw|secret|api[_-]?key|token|DB_' /var/www /opt /etc 2>/dev/null | grep -v Binary
+find / \( -name '.env' -o -name 'config.php' -o -name 'wp-config.php' -o -name '*.bak' -o -name 'id_rsa' \) 2>/dev/null
+cat /home/*/.bash_history ~/.*_history 2>/dev/null
+ss -tlnp 2>/dev/null                              # внутрішні сервіси → pivoting
+```
+Інтерпретація знахідок: [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) (escape-таблиця), [cron/services](../04-techniques/cron-services.md), [credentials](../04-techniques/credentials-reuse.md).
+
 ## Якщо команда відсутня
 - Нема `ss` → `netstat`; нема `sudo` → `doas`; нема `python3` → `python`.
 - Обмежений shell (rbash)? → `bash -i`, `python pty`, vi `:!/bin/bash`.
