@@ -47,6 +47,9 @@
 ### Scripts
 [flagscan.sh](05-scripts/flagscan.sh) (пошук прапорців) · [quick-recon.sh](05-scripts/quick-recon.sh) · [cred-spray-local.sh](05-scripts/cred-spray-local.sh) · [опис](05-scripts/README.md)
 
+### Tools (готові бінарники/скрипти для заливки на ціль)
+[linpeas/pspy/chisel/socat/ncat, webshells, win-бінарі](tools/README.md) — ~31 МБ, працюють офлайн.
+
 ### Windows (вторинно)
 [windows-enum](06-windows/windows-enum.md) · [windows cheatsheet](06-windows/windows-cheatsheet.md)
 

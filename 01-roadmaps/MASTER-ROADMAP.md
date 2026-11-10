@@ -76,7 +76,7 @@ python3 -c 'import pty;pty.spawn("/bin/bash")'  # Ctrl+Z; stty raw -echo; fg; ex
 
 ---
 
-## 4. Post-Exploitation (без рута)
+## 4. Post-Exploitation (без рута) <a id="4-post-exploitation"></a>
 → детально: [post-exploitation roadmap](post-exploitation.md)
 
 Швидкий автозбір:

