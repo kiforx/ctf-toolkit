@@ -1,7 +1,9 @@
 # CTF Toolkit
 
-Офлайн-інструментарій для CTF: roadmaps, workflows, cheatsheets, technique-гайди та скрипти
-для розвідки, отримання доступу, пост-експлойту й пошуку прапорців.
+Офлайн-інструментарій для CTF (KotH): roadmaps, workflows, cheatsheets, technique-гайди та скрипти
+для розвідки, отримання доступу, підняття до **root** і пошуку прапорців.
+
+**Ціль основного етапу:** отримати root і вписати назву команди у `king.txt` (платформа нараховує бали за утримання вершини); прапорці — бонус по дорозі; знайдені вразливості **патчити** в міру. Деталі — [patching/defense](04-techniques/patching-defense.md).
 
 Розрахований на роботу **без інтернету** (локальні довідники й скрипти) та **без AI** під час змагання —
 усе потрібне зібрано тут, щоб швидко знайти наступну дію й повернутися до практики.
@@ -45,7 +47,7 @@
 [perms/SUID/cap](04-techniques/linux-perms-suid-cap.md) · [cron/services](04-techniques/cron-services.md) · [credentials reuse](04-techniques/credentials-reuse.md) · [web vulns](04-techniques/web-vulns-overview.md) · [containers](04-techniques/containers.md)
 
 ### Scripts
-[flagscan.sh](05-scripts/flagscan.sh) (пошук прапорців) · [quick-recon.sh](05-scripts/quick-recon.sh) · [cred-spray-local.sh](05-scripts/cred-spray-local.sh) · [опис](05-scripts/README.md)
+[flags_searcher_obf.sh](05-scripts/flags_searcher_obf.sh) (пошук прапорців) · [flag-encode.sh](05-scripts/flag-encode.sh) (→ `bestCTF{FLAG}`) · [quick-recon.sh](05-scripts/quick-recon.sh) · [cred-spray-local.sh](05-scripts/cred-spray-local.sh) · [опис](05-scripts/README.md)
 
 ### Tools (готові бінарники/скрипти для заливки на ціль)
 [linpeas/pspy/chisel/socat/ncat, webshells, win-бінарі](tools/README.md) — ~31 МБ, працюють офлайн.
@@ -58,18 +60,20 @@
 
 ---
 
-## Формат прапорця (поточна ціль)
+## Формат прапорця
 ```
-best + CTF із шумом [-_.] + {payload} + :<номер>
-приклад:  be_s_t_CTF-_{h1dd3n_r0b0ts_txt}:1
+на машині:    be-.s-tCT.F--{FLAG}:<буква><номер>    напр. be-.s-tCT.F--{h1dd3n}:A3
+на платформу: bestCTF{FLAG}                          напр. bestCTF{h1dd3n}
 ```
-Пошук — [flagscan.sh](05-scripts/flagscan.sh) або [flag-hunting roadmap](01-roadmaps/flag-hunting.md).
-Формат налаштовується: `FLAG_REGEX`/`NOISE` у скрипті змінюються під будь-яку ціль.
+`best`+`CTF` із шумом `[-_.]`, тіло `{...}`, суфікс `:<буква-категорія><номер>` = у який слот здавати.
+На платформу вносимо **лише `bestCTF{FLAG}`** (без букви/номера). Нормалізація — [flag-encode.sh](05-scripts/flag-encode.sh).
+Пошук — [flags_searcher_obf.sh](05-scripts/flags_searcher_obf.sh) · деталі — [flag-hunting](01-roadmaps/flag-hunting.md).
 
 ---
 
 ## Легенда позначок
 `P1/P2/P3` — пріоритет (критично / бажано / опційно) · `повтор` — повернутися до кроку · `→` наступний документ.
 
-## Обмеження / правила
-Матеріали орієнтовані на дозволені дії: розвідка, enum, пошук прапорців. Без деструктиву (DoS, видалення сервісів/файлів, блокування інших) — конкретні обмеження завжди за правилами конкретного змагання.
+## Обмеження / правила (SG main)
+Дозволено: розвідка, enum, вхід, підняття до root на **своїй** цілі, пошук прапорців, **патчинг** своєї машини.
+Заборонено (бан): DoS/флуд/брут платформи · вимикати машину, видаляти сервіси/системні файли · **видаляти чи змінювати прапорці** · блокувати інших фаєрволом · **атакувати IP інших учасників** (навіть із захопленої машини) · **AI-асистенти** (штраф). Повні правила — у брифі організаторів.

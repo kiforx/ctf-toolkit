@@ -67,7 +67,7 @@ cd tools/linux && python3 -m http.server 8000        # роздача на ці�
 - [ ] P1 `tools/linux/chisel` (або `ligolo-agent`) — пивотинг
 - [ ] P1 `tools/linux/socat`, `ncat` — shell/передача, якщо на цілі бракує
 - [ ] P2 `tools/windows/*` — якщо можливий Windows
-- [ ] P3 GTFOBins офлайн-копія (sudo/SUID зловживання) — за бажанням
+- [ ] P3 GTFOBins офлайн — опційно (готові escapes уже в [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md))
 > Linux-бінарники — amd64 (ELF x86-64). Під іншу архітектуру цілі знадобиться відповідний білд.
 
 ## 6. Фінальна перевірка

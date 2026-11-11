@@ -14,9 +14,9 @@ grep -rn 'db' --include='*.php' /var/www          # лише певні файл
 
 ### Flag regex (сепаратори `-` `_` `.`)
 ```bash
-grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+' / 2>/dev/null | sort -u
+grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' / 2>/dev/null | sort -u
 ```
-Готовий скрипт із дедупом і фільтрами: [flagscan.sh](../05-scripts/flagscan.sh).
+Готовий скрипт із дедупом і фільтрами: [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh) (`--key ФАЙЛ --directory ДИР`, [опис](../05-scripts/README.md)).
 > Увага: літери флагу розбиті сепараторами, тож пошук літерального `bestCTF` реальні флаги НЕ ловить — лише regex вище.
 
 ## find — пошук за іменем/властивостями
@@ -34,7 +34,7 @@ find / -name '*.php' -exec grep -l 'password' {} \; 2>/dev/null
 
 ## Корисні комбінації для прапорців
 ```bash
-FR='b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+'
+FR='b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+'
 # у гарячих директоріях
 grep -raoHE "$FR" /home /root /var/www /opt /srv 2>/dev/null | sort -u
 # env процесів
@@ -44,4 +44,4 @@ cat /proc/*/environ 2>/dev/null | tr '\0' '\n' | grep -aoE "$FR"
 ## Пастки
 - Завжди `2>/dev/null` — інакше вивід тоне в «Permission denied».
 - `grep -r /` довго — починати з «гарячих» директорій (`/home`, `/var/www`, `/opt`).
-- Сепаратори `-_.` → regex вище або [flagscan.sh](../05-scripts/flagscan.sh).
+- Сепаратори `-_.` → regex вище або [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh).

@@ -1,6 +1,6 @@
 # Technique: Linux Permissions / SUID / Capabilities / sudo
 
-**Навіщо:** зрозуміти, які «легальні» механізми дають доступ до чужих файлів чи виконання від іншого юзера. У цьому CTF root не мета, але ці механізми часто відкривають доступ до прапорців/файлів інших юзерів.
+**Навіщо:** ці «легальні» механізми — основний шлях до **root** (ціль основного етапу), а також до чужих файлів/прапорців. Знайшов вектор у `sudo -l`/SUID/cron/cap → escape з таблиці нижче.
 ← [post-exploitation](../01-roadmaps/post-exploitation.md) · [lateral-movement](../02-workflows/lateral-movement.md)
 
 ---

@@ -3,7 +3,8 @@
 **Головний алгоритм роботи з ціллю.** Не лінійний — рух за розгалуженнями «якщо знайдено X → крок Y».
 Повертатися сюди після завершення кроку або при затику.
 
-> Профіль цього CTF: **root не потрібен**, прапорці розкидані по сервісах/юзерах/файлах → акцент на enum, credential reuse і латеральному русі, а не на priv-esc.
+> **Ціль (основний етап, KotH):** отримати **root** і вписати назву команди у `king.txt` — платформа читає його й нараховує бали за утримання вершини. Прапорці знаходимо по дорозі до рута (бонусні бали). Знайдені вразливості **патчимо** (в міру), щоб суперники не пройшли тим самим шляхом.
+> Повний шлях: recon → вхід → **privilege escalation до root** → `king.txt` + патч. Flag-hunt — на кожному рівні доступу.
 
 ---
 
@@ -77,41 +78,50 @@ python3 -c 'import pty;pty.spawn("/bin/bash")'  # Ctrl+Z; stty raw -echo; fg; ex
 
 ---
 
-## 4. Post-Exploitation (без рута) <a id="4-post-exploitation"></a>
-→ детально: [post-exploitation roadmap](post-exploitation.md)
+## 4. Post-Exploitation → Privilege Escalation до root <a id="4-post-exploitation"></a>
+→ детально: [post-exploitation roadmap](post-exploitation.md) · [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md)
 
 Швидкий автозбір (готовий блок — [linux-quick: швидкі вектори](../03-cheatsheets/linux-quick.md)):
 ```bash
 id; sudo -l; cat ~/.bash_history; ls -la ~ /home/*; env
 ss -tlnp 2>/dev/null                 # внутрішні сервіси на localhost
+./linpeas.sh ; ./les.sh              # авто-enum priv-esc (залити з tools/)
 ```
-→ за наявності часу — залити [linpeas](../02-workflows/file-transfer.md).
+→ залити: [tools/](../tools/README.md) через [file-transfer](../02-workflows/file-transfer.md).
 
-### Розгалуження:
+### Розгалуження (мета — root):
 | Знахідка | → |
 |---|---|
-| Креди в конфігах/`.env`/`history` | [credential-hunting](../02-workflows/credential-hunting.md) → перевірка на інших юзерах |
-| `sudo -l` дає команди | [perms/SUID](../04-techniques/linux-perms-suid-cap.md) — часто доступ до файлів/флагу |
+| `sudo -l` дає команди | [perms/SUID escapes](../04-techniques/linux-perms-suid-cap.md) — готові payload-и до root |
+| SUID / capabilities | [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) — escape-таблиця |
+| Cron/скрипт від root із записом | [cron/services](../04-techniques/cron-services.md) — writable/PATH/wildcard |
+| Стара версія ядра | `./les.sh` → kernel exploit |
+| Креди в конфігах/`.env`/`history` | [credential-hunting](../02-workflows/credential-hunting.md) → `su`/reuse (інколи root) |
 | Внутрішній порт (напр. 3306 на localhost) | [pivoting/port-forward](../02-workflows/pivoting-portforward.md) |
-| SSH-ключ іншого юзера | `ssh -i key user@localhost` → [lateral](../02-workflows/lateral-movement.md) |
-| Новий користувач/сервіс | повернення до enum цього сервісу |
 
-**Кожен новий користувач = нова домашня директорія = ймовірно новий прапорець.**
+**Отримано root** → вписати назву команди у `king.txt`, далі патчити вектор ([patching](../04-techniques/patching-defense.md)):
+```bash
+id                                   # uid=0(root)
+echo '<НАЗВА_КОМАНДИ>' > /king.txt   # шлях, який читає платформа (уточнити розташування)
+```
+Кожен новий користувач/рівень = нова домашня директорія = ймовірно новий прапорець.
 
 ---
 
 ## 5. Flag Hunting
-→ детально: [flag-hunting roadmap](flag-hunting.md) · скрипт [flagscan.sh](../05-scripts/flagscan.sh)
+→ детально: [flag-hunting roadmap](flag-hunting.md) · пошук [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh) · здача [flag-encode.sh](../05-scripts/flag-encode.sh)
 
 На кожному рівні доступу:
 ```bash
-bash flagscan.sh --key=KEY /          # пошук за форматом (дедуп, фільтри)
+printf '%s' 'S@mEvEryC0olk3Y1414$' > /tmp/.k            # ключ у файл (один раз)
+bash flags_searcher_obf.sh --key /tmp/.k --directory / | bash flag-encode.sh   # → bestCTF{FLAG}  slot=A3
 # keyless-варіант:
-grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+' / 2>/dev/null | sort -u
+grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' / 2>/dev/null | sort -u
 ```
 Місця: `/home/*`, `/var/www`, `/opt`, `/srv`, `/tmp`, `/var/mail`, конфіги, БД, `/var/backups`, env.
+Здача: у поле вносимо **лише `bestCTF{FLAG}`**; `:<буква><номер>` = у який слот.
 
-**Знайдено прапорець** → [перевірити](flag-hunting.md#перевірка-перед-здачею) → здати під номером на платформі → записати в tracker.
+**Знайдено прапорець** → [нормалізувати](flag-hunting.md#перевірка-перед-здачею) у `bestCTF{FLAG}` → здати у слот `:<буква><номер>` → записати у спільний нотатник.
 
 ---
 
@@ -127,7 +137,7 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 ## Довідники (швидкий доступ)
 **Cheatsheets:** [exploit-chains (повні потоки)](../03-cheatsheets/exploit-chains.md) · [nmap](../03-cheatsheets/nmap.md) · [ffuf/gobuster](../03-cheatsheets/ffuf-gobuster.md) · [curl](../03-cheatsheets/curl.md) · [netcat/socat](../03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) · [databases](../03-cheatsheets/databases.md) · [LFI/traversal](../03-cheatsheets/lfi-traversal.md) · [command injection](../03-cheatsheets/command-injection.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [SMB](../03-cheatsheets/smb-enum.md) · [grep/find](../03-cheatsheets/grep-find.md) · [linux-quick](../03-cheatsheets/linux-quick.md)
 
-**Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md)
+**Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../04-techniques/patching-defense.md)
 
 **Інше:** [tools (бінарники)](../tools/README.md) · [Windows](../06-windows/windows-enum.md) · [файли/передача](../02-workflows/file-transfer.md)
 

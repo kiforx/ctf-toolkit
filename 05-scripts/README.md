@@ -1,39 +1,72 @@
 # Scripts
 
-Допоміжні скрипти. Усі працюють офлайн (локальна ціль у VPN). Запуск через `bash <script>`.
+Допоміжні скрипти. Запуск через `bash <script>`.
 ← [MASTER](../01-roadmaps/MASTER-ROADMAP.md)
 
 | Скрипт | Де запускати | Що робить | Приклад |
 |---|---|---|---|
-| [flagscan.sh](flagscan.sh) | на цілі (у shell) | пошук прапорців за форматом, дедуп, фільтри | `bash flagscan.sh --key=KEY /` |
+| [flags_searcher_obf.sh](flags_searcher_obf.sh) | на цілі (у shell) | пошук прапорців (обфускований, автор — тімейт) | `bash flags_searcher_obf.sh --key K --directory /` |
+| [flag-encode.sh](flag-encode.sh) | будь-де | сире → `bestCTF{FLAG}` + слот | `bash flag-encode.sh 'be-.s-tCT.F--{x}:A3'` |
+| [flagscan.sh](flagscan.sh) | на цілі (у shell) | читабельний fallback-пошук прапорців | `bash flagscan.sh --key=KEY /` |
 | [quick-recon.sh](quick-recon.sh) | на Kali | швидкий + повний nmap-скан | `bash quick-recon.sh 10.0.N0.10` |
 | [cred-spray-local.sh](cred-spray-local.sh) | на цілі (у shell) | перевірка 1 пароля по локальних юзерах | `bash cred-spray-local.sh 'Pass123'` |
 
-## flagscan.sh — детальніше
-Автор — тімейт. Перевірено: ловить усі відомі зразки прапорців (сепаратори `-` `_` `.`, зокрема кратні й відсутні), дедуплікує, пропускає бінарні файли.
+## flags_searcher_obf.sh (основний, тімейта) — `flagsearch 2.0`
+Обфускований шукач прапорців (всередині: `find` + `grep -E`). **Код навмисно обфускований — не редагувати.**
+Перевірено на ізольованій машині: безпечний (лише `find/grep/mktemp/tr/printf`, без мережі/персистенції/деструктиву) і повністю робочий.
+
+**Опції (тільки форма з ПРОБІЛОМ — `--opt=val` у цьому білді зламана):**
+| Опція | Значення |
+|---|---|
+| `--key ФАЙЛ` | **обов'язково.** Файл із access-ключем. Ключ: `S@mEvEryC0olk3Y1414$` |
+| `--directory ДИР` | **обов'язково.** Де рекурсивно шукати |
+| `--include 1,2,3` | лише прапорці з цими номерами |
+| `--exclude 7` | крім цих номерів |
+| `--output ФАЙЛ` | дописати у файл (режим 0600) замість stdout |
+| `--help` / `--version` | довідка / версія |
 
 ```bash
-bash flagscan.sh --key=KEY DIRECTORY        # усі знайдені прапорці
-bash flagscan.sh --key=KEY --include=1,5,7 /    # лише номери 1,5,7
-bash flagscan.sh --key=KEY --exclude=2 /        # крім номера 2 (exclude виграє)
-bash flagscan.sh --key=KEY --output=flags.txt / # у файл (0600)
-bash flagscan.sh --help                          # довідка
+# 1) ключ у файл (один раз):
+printf '%s' 'S@mEvEryC0olk3Y1414$' > /tmp/.k
+# 2) пошук:
+bash flags_searcher_obf.sh --key /tmp/.k --directory /
+# 3) одразу у формат платформи:
+bash flags_searcher_obf.sh --key /tmp/.k --directory / | bash flag-encode.sh   # → bestCTF{FLAG}  slot=A3
 ```
-- `--key` обов'язковий: у скрипті змінна `EXPECTED_KEY` (замінити плейсхолдер на реальний ключ перед грою).
-- Коди виходу: `0` є прапорці · `1` нема / неправильний ключ · `2` помилка використання/вводу.
-- Формат прапорця: `b`+`e`+`s`+`t`+`C`+`T`+`F` з шумом `[-_.]*`, тіло `{[[:alnum:]_]+}`, хвіст `:N`.
-- Інший формат на основному етапі → змінити `FLAG_REGEX`/`NOISE` у скрипті.
+Вивід: `ФАЙЛ: сирий_флаг`. Дедуплікується. Коди виходу: `0` знайдено · `1` нема / невірний чи відсутній ключ · `2` помилка.
 
-### Швидкий keyless-варіант (без скрипта)
-```bash
-grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+' / 2>/dev/null | sort -u
+## flag-encode.sh (здача)
+Нормалізує знайдений флаг у формат платформи:
 ```
+вхід:  be-.s-tCT.F--{h1dd3n}:A3     (на машині, з сепараторами та суфіксом)
+вихід: bestCTF{h1dd3n}   slot=A3    (на платформу — лише bestCTF{FLAG}; slot = куди здавати)
+```
+```bash
+bash flag-encode.sh 'be-.s-tCT.F--{h1dd3n}:A3'     # з аргументу
+<searcher> | bash flag-encode.sh                    # з піпа
+```
+
+## flagscan.sh (читабельний fallback)
+Простий і перевірений пошук за форматом (дедуп, фільтри, пропуск бінарних) — на випадок, якщо обфускований не піде.
+```bash
+bash flagscan.sh --key=KEY DIRECTORY        # усі прапорці
+bash flagscan.sh --key=KEY --include=1,5 /  # фільтр за номерами
+bash flagscan.sh --help
+```
+- `--key` обов'язковий (`EXPECTED_KEY` у скрипті). Коди виходу: `0` є · `1` нема/невірний ключ · `2` помилка.
+
+### Keyless-варіант (без скрипта)
+```bash
+grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' / 2>/dev/null | sort -u
+```
+
+## Формат прапорця
+`best`+`CTF` із шумом `[-_.]`, тіло `{...}`, суфікс `:<буква-категорія><номер>` (напр. `:A3`).
+На платформу — лише `bestCTF{FLAG}`. Деталі: [flag-hunting](../01-roadmaps/flag-hunting.md).
 
 ## Перевірка перед грою
 ```bash
-bash -n flagscan.sh quick-recon.sh cred-spray-local.sh    # синтаксис OK?
-printf 'be_s_t_CTF-_{t3st}:1\n' > /tmp/t && bash flagscan.sh --key=KEY /tmp   # має знайти (з реальним ключем)
+bash -n flag-encode.sh flagscan.sh quick-recon.sh cred-spray-local.sh   # синтаксис OK?
+bash flag-encode.sh 'be-.s-tCT.F--{t3st}:A1'                             # → bestCTF{t3st}  slot=A1
 ```
-
-## Зовнішні інструменти (НЕ в репо — завантажити заздалегідь)
-`linpeas.sh`, `pspy64`, `chisel` — залежать від завантаження до гри, див. [pre-game-checklist](../00-setup/pre-game-checklist.md).
+Готові бінарники (linpeas, pspy64, chisel тощо) — у [tools/](../tools/README.md).

@@ -24,7 +24,7 @@ readonly EXPECTED_KEY='i will write key here'
 
 # b-e_s.t_C-T.F_{payload}:N with arbitrary '-', '_' or '.' noise between letters.
 readonly NOISE='[-_.]*'
-readonly FLAG_REGEX="b${NOISE}e${NOISE}s${NOISE}t${NOISE}C${NOISE}T${NOISE}F${NOISE}\\{[[:alnum:]_]+\\}:[0-9]+"
+readonly FLAG_REGEX="b${NOISE}e${NOISE}s${NOISE}t${NOISE}C${NOISE}T${NOISE}F${NOISE}\\{[[:alnum:]_]+\\}:[A-Za-z0-9]+"
 
 # Parsed command line.
 opt_key=''

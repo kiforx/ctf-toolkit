@@ -4,7 +4,7 @@
 **Коли:** є креди/ключ або shell як обмежений юзер.
 ← [post-exploitation](../01-roadmaps/post-exploitation.md) · [credential-hunting](credential-hunting.md) · [credentials reuse](../04-techniques/credentials-reuse.md)
 
-> Основний спосіб набирати прапорці без рута: кожен новий юзер = нова домашня директорія.
+> Кожен новий юзер = нова домашня директорія (нові прапорці) і, можливо, ближче до root (новий `sudo -l`, нові креди).
 
 ---
 
@@ -39,7 +39,7 @@ ss -tlnp     # напр. 3306/8080 слухає тільки 127.0.0.1
 ## Крок 4. Після зміни юзера — повтор
 ```bash
 id; sudo -l; cat ~/.bash_history; ls -la ~
-bash flagscan.sh --key=KEY ~ 2>/dev/null        # flag-hunt у новій домівці
+bash flags_searcher_obf.sh --key /tmp/.k --directory ~ 2>/dev/null   # flag-hunt у новій домівці (/tmp/.k = ключ)
 ```
 → [flag-hunting](../01-roadmaps/flag-hunting.md)
 

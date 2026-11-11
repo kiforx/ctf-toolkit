@@ -48,10 +48,10 @@ systeminfo                       # версія/патчі -> відомі CVE
 ## Flag-hunt (Windows)
 > Літери флагу розбиті сепараторами `-_.`, тож пошук літерального `bestCTF` їх не ловить. PowerShell-regex із шумом:
 ```powershell
-$fr = 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[A-Za-z0-9_]+\}:[0-9]+'
+$fr = 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[A-Za-z0-9_]+\}:[A-Za-z0-9]+'
 Get-ChildItem C:\ -Recurse -Include *.txt,*.config,*.xml -ErrorAction SilentlyContinue | Select-String -Pattern $fr
 ```
-Альтернатива: забрати цікаві файли на Kali ([file-transfer](../02-workflows/file-transfer.md)) і прогнати [flagscan.sh](../05-scripts/flagscan.sh).
+Альтернатива: забрати цікаві файли на Kali ([file-transfer](../02-workflows/file-transfer.md)) і прогнати [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh).
 
 ## Пастки
 - На Windows не витрачати багато часу, якщо ціль — Linux.

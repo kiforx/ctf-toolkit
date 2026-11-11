@@ -24,7 +24,7 @@ Get-LocalUser ; Get-Process
 ## Пошук файлів / прапорців
 ```powershell
 # за вмістом (літери флагу розбиті сепараторами -_. → regex із шумом)
-$fr = 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[A-Za-z0-9_]+\}:[0-9]+'
+$fr = 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[A-Za-z0-9_]+\}:[A-Za-z0-9]+'
 Get-ChildItem C:\ -Recurse -Include *.txt,*.config,*.xml -ErrorAction SilentlyContinue | Select-String -Pattern $fr
 # за іменем
 Get-ChildItem C:\ -Recurse -Filter *flag* -ErrorAction SilentlyContinue

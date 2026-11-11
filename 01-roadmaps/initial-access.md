@@ -35,7 +35,7 @@ python3 -c 'import pty;pty.spawn("/bin/bash")'
 id; hostname; pwd; sudo -l 2>/dev/null
 
 # 3. Швидкий flag-check на місці
-grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[0-9]+' . ~ 2>/dev/null
+grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' . ~ 2>/dev/null
 ```
 → далі [Post-Exploitation](post-exploitation.md)
 
