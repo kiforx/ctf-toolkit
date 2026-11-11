@@ -41,10 +41,13 @@
 [network-enum](02-workflows/network-enum.md) · [web-enum](02-workflows/web-enum.md) · [service-enum](02-workflows/service-enum.md) · [credential-hunting](02-workflows/credential-hunting.md) · [lateral-movement](02-workflows/lateral-movement.md) · [file-transfer](02-workflows/file-transfer.md) · [pivoting](02-workflows/pivoting-portforward.md)
 
 ### Cheatsheets — швидкі команди
-[exploit-chains (повні потоки)](03-cheatsheets/exploit-chains.md) · [nmap](03-cheatsheets/nmap.md) · [ffuf/gobuster](03-cheatsheets/ffuf-gobuster.md) · [curl](03-cheatsheets/curl.md) · [netcat/socat](03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](03-cheatsheets/sqlmap-sqli.md) · [databases](03-cheatsheets/databases.md) · [LFI/traversal](03-cheatsheets/lfi-traversal.md) · [command injection](03-cheatsheets/command-injection.md) · [webshells/revshells](03-cheatsheets/webshells-revshells.md) · [SMB](03-cheatsheets/smb-enum.md) · [grep/find](03-cheatsheets/grep-find.md) · [linux-quick](03-cheatsheets/linux-quick.md)
+[exploit-chains (повні потоки)](03-cheatsheets/exploit-chains.md) · [nmap](03-cheatsheets/nmap.md) · [ffuf/gobuster](03-cheatsheets/ffuf-gobuster.md) · [curl](03-cheatsheets/curl.md) · [netcat/socat](03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](03-cheatsheets/sqlmap-sqli.md) · [databases](03-cheatsheets/databases.md) · [LFI/traversal](03-cheatsheets/lfi-traversal.md) · [command injection](03-cheatsheets/command-injection.md) · [SSTI](03-cheatsheets/ssti.md) · [XXE](03-cheatsheets/xxe.md) · [auth/JWT](03-cheatsheets/auth-jwt.md) · [XSS](03-cheatsheets/xss.md) · [webshells/revshells](03-cheatsheets/webshells-revshells.md) · [SMB](03-cheatsheets/smb-enum.md) · [grep/find](03-cheatsheets/grep-find.md) · [reversing](03-cheatsheets/reversing.md) · [linux-quick](03-cheatsheets/linux-quick.md)
 
 ### Techniques — зрозуміти механізм
 [perms/SUID/cap](04-techniques/linux-perms-suid-cap.md) · [cron/services](04-techniques/cron-services.md) · [credentials reuse](04-techniques/credentials-reuse.md) · [web vulns](04-techniques/web-vulns-overview.md) · [containers](04-techniques/containers.md)
+
+### Ports — довідник портів
+[ports](08-ports/README.md) — поширені + незвичні порти: що це може бути і з чого почати
 
 ### Scripts
 [flags_searcher_obf.sh](05-scripts/flags_searcher_obf.sh) (пошук прапорців) · [flag-encode.sh](05-scripts/flag-encode.sh) (→ `bestCTF{FLAG}`) · [quick-recon.sh](05-scripts/quick-recon.sh) · [cred-spray-local.sh](05-scripts/cred-spray-local.sh) · [опис](05-scripts/README.md)

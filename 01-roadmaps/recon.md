@@ -26,7 +26,7 @@ sudo nmap -sU --top-ports 50 -T4 $TARGET -oN nmap-udp.txt
 ## Що читати у виводі
 - **Версія сервісу** → одразу `searchsploit <продукт версія>` (offline exploit-db).
 - **HTTP title / redirect** → натякає на CMS/додаток.
-- **Нестандартний порт** → `nc -nv $TARGET <port>`, подивитись banner.
+- **Нестандартний порт** → `nc -nv $TARGET <port>`, подивитись banner; що це може бути → [ports](../08-ports/README.md).
 - Відкриті `139/445`, `3389`, `5985` → ймовірно Windows.
 
 ## Інтерпретація → наступний крок

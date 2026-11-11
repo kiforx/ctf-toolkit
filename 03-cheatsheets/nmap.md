@@ -42,6 +42,35 @@ nmap -sU -p161 --script snmp-info,snmp-brute $TARGET                     # SNMP
 nmap --script vuln $TARGET          # усі відомі вразливості (повільно)
 ```
 
+## NSE — ще скрипти
+```bash
+nmap -p80,443 --script http-methods,http-robots.txt,http-webdav-scan $TARGET  # методи/robots/PUT
+nmap -p443 --script ssl-cert,ssl-enum-ciphers $TARGET                   # CN/SAN у сертифікаті (vhosts!), слабкі шифри
+nmap -p389 --script ldap-rootdse,ldap-search $TARGET                    # LDAP дерево (анон-bind)
+nmap -p53  --script dns-nsid,dns-recursion $TARGET                      # DNS
+nmap -p2049 --script nfs-showmount,nfs-ls $TARGET                       # NFS експорти/файли
+nmap -p11211 --script memcached-info $TARGET                            # Memcached (unauth)
+nmap -p9200 --script http-elasticsearch-head $TARGET                    # Elasticsearch
+nmap --script-help http-enum                                           # що робить скрипт (офлайн-довідка)
+ls /usr/share/nmap/scripts/ | grep <сервіс>                            # які скрипти є локально
+```
+
+## Версія / банер глибше
+```bash
+nmap -sV --version-intensity 9 -p <port> $TARGET    # максимум зондів для версії
+nmap -sV --version-all -p <port> $TARGET            # не зупинятись на першому збігу
+nmap -sV --script banner -p <port> $TARGET          # витягнути сирий banner
+```
+
+## Таймінг / обхід фільтра (своя ціль)
+```bash
+nmap -Pn $TARGET                         # host seems down → не пінгувати
+nmap --source-port 53 -p- $TARGET        # прикинутись DNS-трафіком (фільтр по src-порту)
+nmap -f $TARGET                          # фрагментувати пакети
+nmap --scan-delay 100ms $TARGET          # повільніше, якщо скан «гасять»
+nmap -sT $TARGET                         # full-connect (без root, надійніше через VPN)
+```
+
 ## Корисні one-liner-и
 ```bash
 nmap -p- --min-rate 5000 -T4 $TARGET -oG - | grep '/open/'   # усі порти, grep-friendly

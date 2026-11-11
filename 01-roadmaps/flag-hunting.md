@@ -18,7 +18,7 @@
 
 ## Пошук
 ```bash
-# основний: обфускований searcher тімейта (space-форма; --key = ФАЙЛ з ключем)
+# основний: обфускований searcher (space-форма; --key = ФАЙЛ з ключем)
 printf '%s' 'S@mEvEryC0olk3Y1414$' > /tmp/.k                 # ключ у файл (один раз)
 bash flags_searcher_obf.sh --key /tmp/.k --directory / | bash flag-encode.sh
 #   → bestCTF{FLAG}  slot=A3   (фільтри: --include 1,2 / --exclude 7 / --output FILE)

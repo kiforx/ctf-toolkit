@@ -37,7 +37,7 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 | **139/445** SMB | [service-enum: SMB](../02-workflows/service-enum.md#smb) + [smb cheatsheet](../03-cheatsheets/smb-enum.md) |
 | **3306/5432/6379/27017** DB/Redis | [databases cheatsheet](../03-cheatsheets/databases.md) — enum/dump/outfile/Redis-foothold |
 | **3389/5985** RDP/WinRM | Windows → [windows-enum](../06-windows/windows-enum.md) |
-| Нетиповий порт | `nc -nv <TARGET> <PORT>`, banner → `searchsploit <сервіс версія>` |
+| Нетиповий порт | `nc -nv <TARGET> <PORT>`, banner → `searchsploit`; що це може бути → [ports](../08-ports/README.md) |
 
 **Правило:** жоден порт не ігнорувати. Кожен порт = потенційний прапорець.
 
@@ -57,6 +57,10 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 | Форма upload | [webshell](../03-cheatsheets/webshells-revshells.md) | [chain: upload](../03-cheatsheets/exploit-chains.md#upload) |
 | SQLi у `id=1` | [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) | [chain: SQLi](../03-cheatsheets/exploit-chains.md#sqli) |
 | Параметр з URL | SSRF → [web-vulns](../04-techniques/web-vulns-overview.md) | — |
+| Ввід відбивається, `{{7*7}}`=49 | [SSTI](../03-cheatsheets/ssti.md) → RCE | [chain: SSTI](../03-cheatsheets/exploit-chains.md#ssti) |
+| Ендпоінт приймає XML, upload `.svg`/`.docx` | [XXE](../03-cheatsheets/xxe.md) | [chain: XXE](../03-cheatsheets/exploit-chains.md#xxe) |
+| JWT-токен / cookie з `role`,`isAdmin` | [auth/JWT](../03-cheatsheets/auth-jwt.md) | — |
+| JSON-логін, проходить `{"$ne":null}` | [NoSQLi](../04-techniques/web-vulns-overview.md#nosqli) | — |
 | CMS (WordPress/Joomla) | версія → `searchsploit`, вразливі плагіни | — |
 | `.git/` `.bak` `~` | завантажити й читати сорси/креди | — |
 | Нічого | ffuf з розширеннями (`.php,.txt,.bak,.zip`), vhosts, інші порти | — |
@@ -135,9 +139,9 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 ---
 
 ## Довідники (швидкий доступ)
-**Cheatsheets:** [exploit-chains (повні потоки)](../03-cheatsheets/exploit-chains.md) · [nmap](../03-cheatsheets/nmap.md) · [ffuf/gobuster](../03-cheatsheets/ffuf-gobuster.md) · [curl](../03-cheatsheets/curl.md) · [netcat/socat](../03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) · [databases](../03-cheatsheets/databases.md) · [LFI/traversal](../03-cheatsheets/lfi-traversal.md) · [command injection](../03-cheatsheets/command-injection.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [SMB](../03-cheatsheets/smb-enum.md) · [grep/find](../03-cheatsheets/grep-find.md) · [linux-quick](../03-cheatsheets/linux-quick.md)
+**Cheatsheets:** [exploit-chains (повні потоки)](../03-cheatsheets/exploit-chains.md) · [nmap](../03-cheatsheets/nmap.md) · [ffuf/gobuster](../03-cheatsheets/ffuf-gobuster.md) · [curl](../03-cheatsheets/curl.md) · [netcat/socat](../03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) · [databases](../03-cheatsheets/databases.md) · [LFI/traversal](../03-cheatsheets/lfi-traversal.md) · [command injection](../03-cheatsheets/command-injection.md) · [SSTI](../03-cheatsheets/ssti.md) · [XXE](../03-cheatsheets/xxe.md) · [auth/JWT](../03-cheatsheets/auth-jwt.md) · [XSS](../03-cheatsheets/xss.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [SMB](../03-cheatsheets/smb-enum.md) · [grep/find](../03-cheatsheets/grep-find.md) · [reversing](../03-cheatsheets/reversing.md) · [linux-quick](../03-cheatsheets/linux-quick.md)
 
 **Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../04-techniques/patching-defense.md)
 
-**Інше:** [tools (бінарники)](../tools/README.md) · [Windows](../06-windows/windows-enum.md) · [файли/передача](../02-workflows/file-transfer.md)
+**Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../06-windows/windows-enum.md) · [файли/передача](../02-workflows/file-transfer.md)
 

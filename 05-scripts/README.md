@@ -5,13 +5,13 @@
 
 | Скрипт | Де запускати | Що робить | Приклад |
 |---|---|---|---|
-| [flags_searcher_obf.sh](flags_searcher_obf.sh) | на цілі (у shell) | пошук прапорців (обфускований, автор — тімейт) | `bash flags_searcher_obf.sh --key K --directory /` |
+| [flags_searcher_obf.sh](flags_searcher_obf.sh) | на цілі (у shell) | пошук прапорців (обфускований) | `bash flags_searcher_obf.sh --key K --directory /` |
 | [flag-encode.sh](flag-encode.sh) | будь-де | сире → `bestCTF{FLAG}` + слот | `bash flag-encode.sh 'be-.s-tCT.F--{x}:A3'` |
 | [flagscan.sh](flagscan.sh) | на цілі (у shell) | читабельний fallback-пошук прапорців | `bash flagscan.sh --key=KEY /` |
 | [quick-recon.sh](quick-recon.sh) | на Kali | швидкий + повний nmap-скан | `bash quick-recon.sh 10.0.N0.10` |
 | [cred-spray-local.sh](cred-spray-local.sh) | на цілі (у shell) | перевірка 1 пароля по локальних юзерах | `bash cred-spray-local.sh 'Pass123'` |
 
-## flags_searcher_obf.sh (основний, тімейта) — `flagsearch 2.0`
+## flags_searcher_obf.sh (основний) — `flagsearch 2.0`
 Обфускований шукач прапорців (всередині: `find` + `grep -E`). **Код навмисно обфускований — не редагувати.**
 Перевірено на ізольованій машині: безпечний (лише `find/grep/mktemp/tr/printf`, без мережі/персистенції/деструктиву) і повністю робочий.
 

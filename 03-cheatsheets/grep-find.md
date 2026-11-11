@@ -19,6 +19,20 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 Готовий скрипт із дедупом і фільтрами: [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh) (`--key ФАЙЛ --directory ДИР`, [опис](../05-scripts/README.md)).
 > Увага: літери флагу розбиті сепараторами, тож пошук літерального `bestCTF` реальні флаги НЕ ловить — лише regex вище.
 
+## ripgrep (`rg`) — швидше за `grep -r` (якщо є на цілі)
+```bash
+rg -n 'password|secret|token' /var/www        # швидкий рекурсивний пошук
+rg -uu -n 'api[_-]?key' /                       # -uu: не ігнорувати hidden/.gitignore/бінарні
+rg -l 'BEGIN RSA PRIVATE KEY' /home             # файли з приватними ключами
+rg -o "$FR" /home /opt 2>/dev/null              # той самий flag-regex ($FR — нижче), швидше
+```
+
+## strings — секрети/флаги у бінарях і дампах
+```bash
+strings -n8 /usr/local/bin/app | grep -iE 'pass|key|flag|http'   # рядки з бінара
+strings core.dump | grep -aoE "$FR"                               # прапорці у core/дампі ($FR — нижче)
+```
+
 ## find — пошук за іменем/властивостями
 ```bash
 find / -name '*flag*' 2>/dev/null
@@ -28,6 +42,10 @@ find / -writable -type d 2>/dev/null              # куди можу писат
 find / -perm -4000 -type f 2>/dev/null            # SUID (довідково)
 find /home -name 'id_rsa' 2>/dev/null             # SSH-ключі
 find / -name '*.bak' -o -name '*.sql' 2>/dev/null # бекапи/дампи
+find / -perm -o+w -type f 2>/dev/null             # world-writable файли (hijack/крон)
+find / -user root -perm -4000 2>/dev/null         # root-SUID (priv-esc кандидати)
+find /home -user www-data 2>/dev/null             # файли конкретного юзера
+find / -newermt '2026-11-14 09:00' ! -newermt '2026-11-14 21:00' 2>/dev/null  # змінені під час гри
 # find + grep (вміст у знайдених)
 find / -name '*.php' -exec grep -l 'password' {} \; 2>/dev/null
 ```
