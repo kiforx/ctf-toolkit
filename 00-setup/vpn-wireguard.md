@@ -1,9 +1,5 @@
 # Setup: WireGuard VPN
 
-> Факти нижче — з офіційного `SG test.pdf`.
-
----
-
 ## Встановлення
 ```bash
 # Kali / Debian / Ubuntu

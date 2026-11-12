@@ -19,8 +19,7 @@ misconfiguration, без переказу конкретних writeup-ів.
 | Факти про формат/правила/ціль/VPN | з офіційного `SG main.pdf` |
 | Формат прапорця: шум `[-_.]`, тіло `{...}`, суфікс `:<буква><номер>`; здавати `bestCTF{FLAG}` | з `SG main.pdf` |
 | [flag-encode.sh](../05-scripts/flag-encode.sh) (нормалізація у `bestCTF{FLAG}`) | перевірено на прикладах |
-| [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh) | розкрито й перевірено на ізольованій машині: це `flagsearch 2.0` (find+grep), **безпечний** (без мережі/персистенції/деструктиву), усі опції робочі |
-| [flagscan.sh](../05-scripts/flagscan.sh) (читабельний fallback) | перевірено на зразках тестового етапу |
+| [flags_searcher_obf.sh](../05-scripts/flags_searcher_obf.sh) | розкрито й перевірено на ізольованій машині: це `flagsearch 2.0` (find+grep),|
 | Синтаксис решти скриптів | `bash -n` OK |
 | Команди nmap/curl/grep/find/ffuf/smb/priv-esc тощо | стандартний синтаксис; **не** запускались проти живої цілі |
 | Reverse shells / payload-и / escapes | класичні робочі шаблони; IP/порт/оточення підлаштувати на місці |

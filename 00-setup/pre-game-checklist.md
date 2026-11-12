@@ -1,6 +1,6 @@
 # Setup: Pre-Game Checklist (офлайн-підготовка)
 
-**Для чого:** на цілі немає інтернету, AI заборонений — усе потрібне має бути завантажено й перевірено до гри.
+**Для чого:** усе потрібне має бути завантажено й перевірено до гри.
 ← [vpn](vpn-wireguard.md) · [scripts](../05-scripts/) · [MASTER](../01-roadmaps/MASTER-ROADMAP.md)
 
 > Пріоритет: P1 критично · P2 бажано · P3 за наявності місця/часу.
@@ -8,10 +8,10 @@
 ---
 
 ## 1. Робоче середовище
-- [ ] P1 Kali з інструментами (краще у **віртуалці**, де й VPN — див. [vpn](vpn-wireguard.md))
-- [ ] P1 WireGuard встановлено й перевірено
-- [ ] P2 Запасний інтернет (хотспот) — для власних девайсів, НЕ для цілі
-- [ ] P1 Цей репозиторій локально, перевірена навігація
+-P1 Kali з інструментами (краще у **віртуалці**, де й VPN — див. [vpn](vpn-wireguard.md))
+-P1 WireGuard встановлено й перевірено
+-P2 Запасний інтернет (хотспот) — для власних девайсів, НЕ для цілі
+-P1 Цей репозиторій локально, перевірена навігація
 
 ## 2. Інструменти (перевірка наявності)
 ```bash
@@ -35,14 +35,14 @@ for t in nmap ffuf gobuster curl wget nc socat sqlmap nikto whatweb \
 | chisel/proxychains | пивотинг | P2 |
 
 ## 3. Wordlists (перевірка наявності та вибір) <a id="wordlists-перевірка-наявності-та-вибір"></a>
-Wordlists у репо не кладемо (завеликі) — вони стандартно є в Kali. Перед грою переконатися, що на місці:
+Перед грою переконатися, що на місці:
 ```bash
 ls /usr/share/seclists >/dev/null 2>&1 && echo "[+] SecLists" || echo "[-] sudo apt install seclists"
 ls /usr/share/wordlists/rockyou.txt   >/dev/null 2>&1 && echo "[+] rockyou" || \
   (ls /usr/share/wordlists/rockyou.txt.gz >/dev/null 2>&1 && echo "[!] rockyou.gz — розпакувати: sudo gunzip -k /usr/share/wordlists/rockyou.txt.gz" || echo "[-] rockyou відсутній")
 ```
-- [ ] P1 **SecLists** у `/usr/share/seclists`
-- [ ] P1 **rockyou.txt** розпакований у `/usr/share/wordlists/`
+-P1 **SecLists** у `/usr/share/seclists` або `/usr/share/wordlists/seclists`
+-P1 **rockyou.txt** розпакований у `/usr/share/wordlists/`
 
 ### Який список під яку задачу
 | Задача | Список | Шлях |
@@ -63,14 +63,13 @@ ls /usr/share/wordlists/rockyou.txt   >/dev/null 2>&1 && echo "[+] rockyou" || \
 ls -la tools/linux tools/windows tools/webshells   # на місці?
 cd tools/linux && python3 -m http.server 8000        # роздача на ціль
 ```
-- [ ] P1 `tools/linux/linpeas.sh`, `pspy64` — enum Linux / процеси без рута
-- [ ] P1 `tools/linux/chisel` (або `ligolo-agent`) — пивотинг
-- [ ] P1 `tools/linux/socat`, `ncat` — shell/передача, якщо на цілі бракує
-- [ ] P2 `tools/windows/*` — якщо можливий Windows
-- [ ] P3 GTFOBins офлайн — опційно (готові escapes уже в [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md))
+-P1 `tools/linux/linpeas.sh`, `pspy64` — enum Linux / процеси без рута
+-P1 `tools/linux/chisel` (або `ligolo-agent`) — пивотинг
+-P1 `tools/linux/socat`, `ncat` — shell/передача, якщо на цілі бракує
+-P2 `tools/windows/*` — якщо можливий Windows
 > Linux-бінарники — amd64 (ELF x86-64). Під іншу архітектуру цілі знадобиться відповідний білд.
 
 ## 6. Фінальна перевірка
-- [ ] P1 `sudo wg-quick up ./bestctf26.conf` → `sudo wg show` має `latest handshake`
-- [ ] P1 `ip a` → `10.8.N.x`; `ping 10.0.N0.10`
-- [ ] P1 Listener-тест: `nc -lvnp 4444` на VPN-адресі, тобто на тій машині де запущений vpn конфіг, для того, щоб reverse shell міг доходити
+-P1 `sudo wg-quick up ./bestctf26.conf` → `sudo wg show` має `latest handshake`
+-P1 `ip a` → `10.8.N.x`; `ping 10.0.N0.10`
+-P1 Listener-тест: `nc -lvnp 4444` на VPN-адресі, тобто на тій машині де запущений vpn конфіг, для того, щоб reverse shell міг доходити

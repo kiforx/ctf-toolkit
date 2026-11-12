@@ -7,7 +7,6 @@
 |---|---|---|---|
 | [flags_searcher_obf.sh](flags_searcher_obf.sh) | на цілі (у shell) | пошук прапорців (обфускований) | `bash flags_searcher_obf.sh --key K --directory /` |
 | [flag-encode.sh](flag-encode.sh) | будь-де | сире → `bestCTF{FLAG}` + слот | `bash flag-encode.sh 'be-.s-tCT.F--{x}:A3'` |
-| [flagscan.sh](flagscan.sh) | на цілі (у shell) | читабельний fallback-пошук прапорців | `bash flagscan.sh --key=KEY /` |
 | [quick-recon.sh](quick-recon.sh) | на Kali | швидкий + повний nmap-скан | `bash quick-recon.sh 10.0.N0.10` |
 | [cred-spray-local.sh](cred-spray-local.sh) | на цілі (у shell) | перевірка 1 пароля по локальних юзерах | `bash cred-spray-local.sh 'Pass123'` |
 
@@ -46,16 +45,8 @@ bash flag-encode.sh 'be-.s-tCT.F--{h1dd3n}:A3'     # з аргументу
 <searcher> | bash flag-encode.sh                    # з піпа
 ```
 
-## flagscan.sh (читабельний fallback)
-Простий і перевірений пошук за форматом (дедуп, фільтри, пропуск бінарних) — на випадок, якщо обфускований не піде.
-```bash
-bash flagscan.sh --key=KEY DIRECTORY        # усі прапорці
-bash flagscan.sh --key=KEY --include=1,5 /  # фільтр за номерами
-bash flagscan.sh --help
-```
-- `--key` обов'язковий (`EXPECTED_KEY` у скрипті). Коди виходу: `0` є · `1` нема/невірний ключ · `2` помилка.
-
-### Keyless-варіант (без скрипта)
+## Fallback без скрипта (keyless grep)
+Якщо `flags_searcher_obf.sh` не піде на цілі — той самий пошук за форматом, без ключа й без скрипта:
 ```bash
 grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:[A-Za-z0-9]+' / 2>/dev/null | sort -u
 ```
@@ -66,7 +57,7 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 
 ## Перевірка перед грою
 ```bash
-bash -n flag-encode.sh flagscan.sh quick-recon.sh cred-spray-local.sh   # синтаксис OK?
+bash -n flag-encode.sh quick-recon.sh cred-spray-local.sh   # синтаксис OK?
 bash flag-encode.sh 'be-.s-tCT.F--{t3st}:A1'                             # → bestCTF{t3st}  slot=A1
 ```
 Готові бінарники (linpeas, pspy64, chisel тощо) — у [tools/](../tools/README.md).

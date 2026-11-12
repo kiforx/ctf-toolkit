@@ -9,10 +9,10 @@
 ---
 
 ## 0. Підготовка
-- [ ] VPN піднятий (`sudo wg show` → `latest handshake`) · [vpn](../00-setup/vpn-wireguard.md)
-- [ ] `ping -c2 <TARGET>` відповідає
-- [ ] Listener для revshell — на VPN-адресі `10.8.N.x` (там, де піднятий VPN), інакше shell не дійде
-- [ ] Спільний нотатник для знахідок відкрито — усі порти/креди/прапорці туди
+-VPN піднятий (`sudo wg show` → `latest handshake`) · [vpn](../00-setup/vpn-wireguard.md)
+`ping -c2 <TARGET>` відповідає
+-Listener для revshell — на VPN-адресі `10.8.N.x` (там, де піднятий VPN), інакше shell не дійде
+-Спільний нотатник для знахідок відкрито — усі порти/креди/прапорці туди
 
 ---
 

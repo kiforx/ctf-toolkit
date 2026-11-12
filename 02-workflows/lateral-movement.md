@@ -4,7 +4,6 @@
 **Коли:** є креди/ключ або shell як обмежений юзер.
 ← [post-exploitation](../01-roadmaps/post-exploitation.md) · [credential-hunting](credential-hunting.md) · [credentials reuse](../04-techniques/credentials-reuse.md)
 
-> Кожен новий юзер = нова домашня директорія (нові прапорці) і, можливо, ближче до root (новий `sudo -l`, нові креди).
 
 ---
 

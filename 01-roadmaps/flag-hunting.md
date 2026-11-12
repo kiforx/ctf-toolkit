@@ -9,7 +9,7 @@
 ## Формат (основний етап)
 ```
 на машині:    be-.s-tCT.F--{FLAG}:<буква><номер>     напр. be-.s-tCT.F--{h1dd3n}:A3
-на платформу: bestCTF{FLAG}                           напр. bestCTF{h1dd3n}
+на платформу: bestCTF{FLAG}                  напр. bestCTF{h1dd3n}
 ```
 - Літери `best`+`CTF` розділені будь-якою кількістю `-` `_` `.` (зокрема кратними й відсутніми).
 - Тіло `{...}` · хвіст `:<буква-категорія><номер>` — вказує, **у яке поле** на платформі здавати.
@@ -19,7 +19,8 @@
 ## Пошук
 ```bash
 # основний: обфускований searcher (space-форма; --key = ФАЙЛ з ключем)
-printf '%s' 'S@mEvEryC0olk3Y1414$' > /tmp/.k                 # ключ у файл (один раз)
+printf '%s' 'S@mEvEryC0olk3Y1414$' > /tmp/.k    # ключ у файл (один раз)
+
 bash flags_searcher_obf.sh --key /tmp/.k --directory / | bash flag-encode.sh
 #   → bestCTF{FLAG}  slot=A3   (фільтри: --include 1,2 / --exclude 7 / --output FILE)
 
