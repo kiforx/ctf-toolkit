@@ -34,6 +34,8 @@ for t in nmap ffuf gobuster curl wget nc socat sqlmap nikto whatweb \
 | evil-winrm/xfreerdp | Windows-доступ | P2 |
 | chisel/proxychains | пивотинг | P2 |
 
+> **Forensics/Stego-інструменти** (окремий напрям) мають свій інвентар і перевірку наявності: [forensics/tools](../forensics/tools.md). Мінімум P1 (встановити заздалегідь): `exiftool binwalk foremost steghide stegseek zsteg sox volatility3 pngcheck` + **stegsolve.jar** (доставити вручну).
+
 ## 3. Wordlists (перевірка наявності та вибір) <a id="wordlists-перевірка-наявності-та-вибір"></a>
 Перед грою переконатися, що на місці:
 ```bash

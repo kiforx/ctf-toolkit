@@ -143,5 +143,5 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 
 **Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../04-techniques/patching-defense.md)
 
-**Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../windows/README.md) · [файли/передача](../02-workflows/file-transfer.md)
+**Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../windows/README.md) · [Forensics/Stego](../forensics/README.md) (аналіз знайдених файлів) · [файли/передача](../02-workflows/file-transfer.md)
 

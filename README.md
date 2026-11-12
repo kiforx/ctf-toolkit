@@ -58,6 +58,9 @@
 ### Windows (окремий напрям)
 Повна база: **[windows/](windows/README.md)** — [fundamentals](windows/00-fundamentals.md) · [enum](windows/01-enumeration.md) · [cmd/powershell](windows/02-cmd-powershell.md) · [privesc](windows/03-privesc.md) · [credentials](windows/04-credentials.md) · [AD](windows/05-active-directory.md) · [lateral/post-ex](windows/06-lateral-postex.md) · [forensics/logs](windows/07-forensics-logs.md) · [cheatsheet](windows/cheatsheet.md)
 
+### Forensics & Stego (окремий напрям — дослідження файлів)
+Повна база: **[forensics/](forensics/README.md)** — [file-triage](forensics/01-file-triage.md) · [metadata](forensics/02-metadata.md) · [archives/carving](forensics/03-archives-carving.md) · [memory/disk/logs](forensics/04-memory-disk-logs.md) · [stego-images](forensics/05-stego-images.md) · [stego-audio](forensics/06-stego-audio.md) · [stego-other](forensics/07-stego-other.md) · [cheatsheet](forensics/cheatsheet.md) · [tools](forensics/tools.md)
+
 ### Довідка
 [джерела та статус перевірки](09-research/sources.md)
 

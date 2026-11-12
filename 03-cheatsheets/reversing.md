@@ -52,3 +52,4 @@ Ghidra (GUI, якщо є час і бінар складний): декомпі�
 - Запуск невідомого бінаря — на СВОЇЙ цілі/у своєму середовищі; не запускати деструктивного наосліп.
 - SUID-бінар з вразливою логікою → шлях до root: [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md).
 - Знайдені креди/URL → [credentials-reuse](../04-techniques/credentials-reuse.md) · сервіс на порту → [ports](../08-ports/README.md).
+- Файл виявився **не** виконуваним (зображення/архів/дамп/документ) → це forensics/stego, не RE → [forensics/](../forensics/README.md).

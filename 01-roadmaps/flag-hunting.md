@@ -40,7 +40,7 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 | Бекапи/дампи | `/var/backups`, `*.sql`, `*.bak`, `*.tar*`, `*.zip` |
 | Бази даних | вхід у БД → `SELECT` по таблицях (креди/нотатки) |
 | Env/процеси | `env`, `cat /proc/*/environ 2>/dev/null \| tr '\0' '\n'` |
-| Логи, метадані файлів | `/var/log/*`; EXIF/PDF-метадані (зразки `3x1f_m3tadata`, `pdf_m3tadata`) |
+| Логи, метадані файлів | `/var/log/*`; EXIF/PDF-метадані (зразки `3x1f_m3tadata`, `pdf_m3tadata`) → [forensics/metadata](../forensics/02-metadata.md) |
 
 ## Пошук за назвою
 ```bash
