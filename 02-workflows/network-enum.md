@@ -41,7 +41,7 @@ sudo nmap -sU --top-ports 50 -T4 $TARGET -oN nmap-udp.txt
 |---|---|
 | 80/443/8080 | [web-enum](web-enum.md) |
 | 21/22/139/445/3306/6379/5432/27017 | [service-enum](service-enum.md) |
-| 3389/5985/135 | [windows-enum](../06-windows/windows-enum.md) |
+| 3389/5985/135 | [windows/](../windows/README.md) ([enum](../windows/01-enumeration.md)) |
 
 ## Нотатки в tracker
 Кожен порт+сервіс+версія → findings-tracker, щоб уникнути повторного скану.

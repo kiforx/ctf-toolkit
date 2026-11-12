@@ -5,7 +5,8 @@
 
 | Скрипт | Де запускати | Що робить | Приклад |
 |---|---|---|---|
-| [flags_searcher_obf.sh](flags_searcher_obf.sh) | на цілі (у shell) | пошук прапорців (обфускований) | `bash flags_searcher_obf.sh --key K --directory /` |
+| [flags_searcher_obf.sh](flags_searcher_obf.sh) | на **Linux**-цілі (shell) | пошук прапорців (обфускований) | `bash flags_searcher_obf.sh --key K --directory /` |
+| [flags_searcher.ps1](flags_searcher.ps1) | на **Windows**-цілі (PowerShell) | пошук прапорців + нормалізація | `powershell -ep bypass -f flags_searcher.ps1 -Path C:\` |
 | [flag-encode.sh](flag-encode.sh) | будь-де | сире → `bestCTF{FLAG}` + слот | `bash flag-encode.sh 'be-.s-tCT.F--{x}:A3'` |
 | [quick-recon.sh](quick-recon.sh) | на Kali | швидкий + повний nmap-скан | `bash quick-recon.sh 10.0.N0.10` |
 | [cred-spray-local.sh](cred-spray-local.sh) | на цілі (у shell) | перевірка 1 пароля по локальних юзерах | `bash cred-spray-local.sh 'Pass123'` |
@@ -34,6 +35,28 @@ bash flags_searcher_obf.sh --key /tmp/.k --directory / | bash flag-encode.sh   #
 ```
 Вивід: `ФАЙЛ: сирий_флаг`. Дедуплікується. Коди виходу: `0` знайдено · `1` нема / невірний чи відсутній ключ · `2` помилка.
 
+## flags_searcher.ps1 (Windows-ціль)
+Пошук прапорців на **Windows** (аналог `flags_searcher_obf.sh` для Linux). Читабельний PowerShell, той самий шумо-стійкий формат; **за замовчуванням одразу нормалізує** у `bestCTF{FLAG}` + слот (не треба тягнути на Kali). Залити на ціль через [file-transfer](../02-workflows/file-transfer.md), далі:
+```powershell
+powershell -ep bypass -f flags_searcher.ps1                        # за замовч. C:\ , нормалізований вивід
+powershell -ep bypass -f flags_searcher.ps1 -Path C:\Users,C:\inetpub
+powershell -ep bypass -f flags_searcher.ps1 -ADS -Registry -EventLogs   # повільніші джерела (потоки/реєстр/логи)
+powershell -ep bypass -f flags_searcher.ps1 -Raw | Set-Content loot.txt # сирі збіги
+```
+| Параметр | Значення |
+|---|---|
+| `-Path <шляхи>` | де шукати (за замовч. `C:\`); кілька через кому |
+| `-Raw` | сирі збіги без нормалізації |
+| `-ADS` | + альтернативні потоки даних (NTFS, повільніше) |
+| `-Registry` | + `HKLM/HKCU:\SOFTWARE` (повільно) |
+| `-EventLogs` | + Application/System/PowerShell-Operational |
+| `-AllFiles` | читати всі файли, не лише текстові розширення |
+| `-MaxFileMB <n>` | пропускати файли > n МБ (за замовч. 20) |
+
+Вивід (нормалізований): `bestCTF{...}  slot=XY  <= джерело`. Дедуплікується. `-ep bypass` обходить ExecutionPolicy (не потребує адмін-прав). Сумісний з Windows PowerShell **5.1+** (дефолт на Windows) і PowerShell 7.
+> Перевірено на PowerShell 7.7 (Linux): regex/нормалізація/дедуп/крайові випадки (неправильний регістр і флаг без слота відкидаються). Гілки ADS/Registry/EventLogs — Windows-only, синтаксично валідні, у цьому середовищі не виконувались.
+> Крос-лінк: швидкий інлайн-варіант і місця пошуку — [windows/cheatsheet](../windows/cheatsheet.md#пошук-прапорців).
+
 ## flag-encode.sh (здача)
 Нормалізує знайдений флаг у формат платформи:
 ```
@@ -57,7 +80,9 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 
 ## Перевірка перед грою
 ```bash
-bash -n flag-encode.sh quick-recon.sh cred-spray-local.sh   # синтаксис OK?
+bash -n flag-encode.sh quick-recon.sh cred-spray-local.sh   # синтаксис .sh OK?
 bash flag-encode.sh 'be-.s-tCT.F--{t3st}:A1'                             # → bestCTF{t3st}  slot=A1
+# ps1 (якщо є pwsh на Kali): перевірка синтаксису
+pwsh -NoProfile -c "[Management.Automation.Language.Parser]::ParseFile('flags_searcher.ps1',[ref]\$null,[ref]\$null)" && echo "ps1 OK"
 ```
-Готові бінарники (linpeas, pspy64, chisel тощо) — у [tools/](../tools/README.md).
+На Windows-цілі скрипт під'їде готовим (PowerShell 5.1+ вбудований). Готові бінарники (linpeas, pspy64, chisel тощо) — у [tools/](../tools/README.md).

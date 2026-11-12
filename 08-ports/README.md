@@ -38,9 +38,9 @@ searchsploit <продукт версія>
 | 1433 | MSSQL | `sa` + слабкий пароль → `xp_cmdshell` | [databases: MSSQL](../03-cheatsheets/databases.md) |
 | 2049 | NFS | `showmount -e`, `no_root_squash` → root | [service-enum: NFS](../02-workflows/service-enum.md) |
 | 3306 | MySQL | `root:` порожній/слабкий; `LOAD_FILE`/outfile | [databases: MySQL](../03-cheatsheets/databases.md) |
-| 3389 | RDP | Windows → enum/креди | [windows-enum](../06-windows/windows-enum.md) |
+| 3389 | RDP | Windows → enum/креди | [windows/](../windows/README.md) |
 | 5432 | PostgreSQL | `postgres:postgres`; `COPY ... TO PROGRAM` RCE | [databases: PostgreSQL](../03-cheatsheets/databases.md) |
-| 5985/5986 | WinRM | креди → `evil-winrm` (shell) | [windows-enum](../06-windows/windows-enum.md) |
+| 5985/5986 | WinRM | креди → `evil-winrm` (shell) | [windows: lateral](../windows/06-lateral-postex.md) |
 | 6379 | Redis | часто без автентифікації → webshell/SSH-ключ | [databases: Redis](../03-cheatsheets/databases.md#redis) |
 | 27017 | MongoDB | часто без автентифікації → дамп колекцій | [databases: MongoDB](../03-cheatsheets/databases.md) |
 

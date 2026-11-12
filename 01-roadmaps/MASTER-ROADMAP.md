@@ -36,7 +36,7 @@ sudo nmap -sU --top-ports 50 <TARGET> -oN nmap-udp.txt
 | **22** SSH | Поки мимо. Повернення з кредами ([lateral](../02-workflows/lateral-movement.md)) |
 | **139/445** SMB | [service-enum: SMB](../02-workflows/service-enum.md#smb) + [smb cheatsheet](../03-cheatsheets/smb-enum.md) |
 | **3306/5432/6379/27017** DB/Redis | [databases cheatsheet](../03-cheatsheets/databases.md) — enum/dump/outfile/Redis-foothold |
-| **3389/5985** RDP/WinRM | Windows → [windows-enum](../06-windows/windows-enum.md) |
+| **3389/5985** RDP/WinRM | Windows → [windows/](../windows/README.md) |
 | Нетиповий порт | `nc -nv <TARGET> <PORT>`, banner → `searchsploit`; що це може бути → [ports](../08-ports/README.md) |
 
 **Правило:** жоден порт не ігнорувати. Кожен порт = потенційний прапорець.
@@ -143,5 +143,5 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 
 **Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../04-techniques/patching-defense.md)
 
-**Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../06-windows/windows-enum.md) · [файли/передача](../02-workflows/file-transfer.md)
+**Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../windows/README.md) · [файли/передача](../02-workflows/file-transfer.md)
 
