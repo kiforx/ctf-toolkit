@@ -62,7 +62,7 @@
 ## Межі напряму
 - **Крек хешів** (NTLM/Kerberos) — таблиця `hashcat -m` у [05-active-directory](05-active-directory.md#крек-кербероста) і [04-credentials](04-credentials.md); офлайн, не проти платформи (правила).
 - **Персистенція** як закріплення **не є ціллю** KotH; у [06-lateral-postex](06-lateral-postex.md) персистенція розглядається лише для **виявлення чужої** (detection), а не для власного закріплення.
-- Правила змагання (не ламати сервіс, не DoS, без AI) діють і тут — див. [patching-defense](../04-techniques/patching-defense.md).
+- Правила змагання (не ламати сервіс, не DoS, без AI) діють і тут — див. [patching-defense](../patching/README.md).
 
 ## Джерела (напрям загалом)
 - HackTricks — Windows Hardening: https://book.hacktricks.wiki/en/windows-hardening/index.html

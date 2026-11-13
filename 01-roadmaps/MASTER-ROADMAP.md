@@ -103,7 +103,7 @@ ss -tlnp 2>/dev/null                 # внутрішні сервіси на lo
 | Креди в конфігах/`.env`/`history` | [credential-hunting](../02-workflows/credential-hunting.md) → `su`/reuse (інколи root) |
 | Внутрішній порт (напр. 3306 на localhost) | [pivoting/port-forward](../02-workflows/pivoting-portforward.md) |
 
-**Отримано root** → вписати назву команди у `king.txt`, далі патчити вектор ([patching](../04-techniques/patching-defense.md)):
+**Отримано root** → вписати назву команди у `king.txt`, далі патчити вектор ([patching](../patching/README.md)):
 ```bash
 id                                   # uid=0(root)
 echo '<НАЗВА_КОМАНДИ>' > /king.txt   # шлях, який читає платформа (уточнити розташування)
@@ -141,7 +141,7 @@ grep -raoHE 'b[-_.]*e[-_.]*s[-_.]*t[-_.]*C[-_.]*T[-_.]*F[-_.]*\{[[:alnum:]_]+\}:
 ## Довідники (швидкий доступ)
 **Cheatsheets:** [exploit-chains (повні потоки)](../03-cheatsheets/exploit-chains.md) · [nmap](../03-cheatsheets/nmap.md) · [ffuf/gobuster](../03-cheatsheets/ffuf-gobuster.md) · [curl](../03-cheatsheets/curl.md) · [netcat/socat](../03-cheatsheets/netcat-socat.md) · [sqlmap/SQLi](../03-cheatsheets/sqlmap-sqli.md) · [databases](../03-cheatsheets/databases.md) · [LFI/traversal](../03-cheatsheets/lfi-traversal.md) · [command injection](../03-cheatsheets/command-injection.md) · [SSTI](../03-cheatsheets/ssti.md) · [XXE](../03-cheatsheets/xxe.md) · [auth/JWT](../03-cheatsheets/auth-jwt.md) · [XSS](../03-cheatsheets/xss.md) · [webshells/revshells](../03-cheatsheets/webshells-revshells.md) · [SMB](../03-cheatsheets/smb-enum.md) · [grep/find](../03-cheatsheets/grep-find.md) · [reversing](../03-cheatsheets/reversing.md) · [linux-quick](../03-cheatsheets/linux-quick.md)
 
-**Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../04-techniques/patching-defense.md)
+**Techniques:** [perms/SUID/cap](../04-techniques/linux-perms-suid-cap.md) · [cron/services](../04-techniques/cron-services.md) · [credentials reuse](../04-techniques/credentials-reuse.md) · [web vulns](../04-techniques/web-vulns-overview.md) · [containers](../04-techniques/containers.md) · [patching/defense](../patching/README.md)
 
 **Інше:** [ports reference](../08-ports/README.md) · [tools (бінарники)](../tools/README.md) · [Windows](../windows/README.md) · [Forensics/Stego](../forensics/README.md) (аналіз знайдених файлів) · [файли/передача](../02-workflows/file-transfer.md)
 

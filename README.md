@@ -3,7 +3,7 @@
 Офлайн-інструментарій для CTF (KotH): roadmaps, workflows, cheatsheets, technique-гайди та скрипти
 для розвідки, отримання доступу, підняття до **root** і пошуку прапорців.
 
-**Ціль основного етапу:** отримати root і вписати назву команди у `king.txt` (платформа нараховує бали за утримання вершини); прапорці — бонус по дорозі; знайдені вразливості **патчити** в міру. Деталі — [patching/defense](04-techniques/patching-defense.md).
+**Ціль основного етапу:** отримати root і вписати назву команди у `king.txt` (платформа нараховує бали за утримання вершини); прапорці — бонус по дорозі; знайдені вразливості **патчити** в міру. Деталі — [patching/defense](patching/README.md).
 
 Розрахований на роботу **без інтернету** (локальні довідники й скрипти) та **без AI** під час змагання —
 усе потрібне зібрано тут, щоб швидко знайти наступну дію й повернутися до практики.
@@ -60,6 +60,9 @@
 
 ### Forensics & Stego (окремий напрям — дослідження файлів)
 Повна база: **[forensics/](forensics/README.md)** — [file-triage](forensics/01-file-triage.md) · [metadata](forensics/02-metadata.md) · [archives/carving](forensics/03-archives-carving.md) · [memory/disk/logs](forensics/04-memory-disk-logs.md) · [stego-images](forensics/05-stego-images.md) · [stego-audio](forensics/06-stego-audio.md) · [stego-other](forensics/07-stego-other.md) · [cheatsheet](forensics/cheatsheet.md) · [tools](forensics/tools.md)
+
+### Patching / Defense (окремий напрям — утримання вершини на KotH)
+Закрити вразливість, якою зайшов, не вбиваючи сервіс. Повна база: **[patching/](patching/README.md)** — [метод](patching/00-method.md) · [web](patching/01-web.md) (webshell/upload/LFI/cmdi/SQLi/SSTI/XXE) · [сервіси](patching/02-services.md) (SSH/FTP/SMB/Redis/БД/SNMP/NFS) · [система](patching/03-system.md) (SUID/cron/sudo/креди) · [cheatsheet](patching/cheatsheet.md)
 
 ### Довідка
 [джерела та статус перевірки](09-research/sources.md)

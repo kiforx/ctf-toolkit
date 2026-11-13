@@ -76,7 +76,7 @@ reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" | findstr
 Кожен **новий хост/юзер** = ймовірно нові креди й новий прапорець → цикл: enum → creds → lateral.
 
 ## 6. Виявлення чужого доступу / персистенції (KotH-оборона, НЕ встановлення своєї)
-**Навіщо:** суперники могли залишити доступ на спільній машині. Виявити (і за правилами — закрити вектор, не ламаючи сервіс → [patching-defense](../04-techniques/patching-defense.md)).
+**Навіщо:** суперники могли залишити доступ на спільній машині. Виявити (і за правилами — закрити вектор, не ламаючи сервіс → [patching-defense](../patching/README.md)).
 ```cmd
 :: підозрілі локальні адміни / нові юзери
 net localgroup administrators & net user
