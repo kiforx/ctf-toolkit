@@ -53,9 +53,10 @@ php_admin_flag engine off
 </FilesMatch>
 ```
 ```nginx
-# nginx: у server{} —
+# nginx: у server{} —  (повніше, разом із «jpg→php» RCE — §9 нижче)
 location ^~ /uploads/ { location ~ \.php$ { return 403; } }
 ```
+> Повні nginx-патчі (виконання в uploads, path-info RCE, autoindex, alias-traversal, `.git`/`.env`) — [§9 Nginx](#9-nginx-патчі-рівня-веб-сервера).
 **Перевірка:** завантаж нормальний `.jpg` → ок; залий `.php` → відхилено / не виконується (`curl .../uploads/x.php` не дає RCE); сайт живий.
 **Пастка:** не прибери право запису повністю, якщо аплоуд — частина легітимного функціоналу (сервіс має працювати). `.htaccess` діє лише з `AllowOverride` — інакше патч у коді/конфігу.
 **Джерело:** OWASP File Upload — https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
@@ -222,6 +223,80 @@ $st=$con->prepare("SELECT * FROM docs WHERE id=? AND user_id=?");
 $st->bind_param("ii",$_GET['id'],$_SESSION['uid']);
 ```
 **Перевірка:** свій обʼєкт доступний; чужий `?id=` → 403; нормальні URL ходять, внутрішні — ні.
+
+---
+
+## 9. Nginx (патчі рівня веб-сервера)
+**Навіщо окремо:** у nginx **немає `.htaccess`** — усі патчі веб-сервером робляться у конфігу (`server{}`/`location{}`) + reload. Частина вразливостей (виконання завантаженого файлу, traversal, витік `.git`/`.env`) закривається саме тут, коли код правити ніколи.
+
+**Знайти конфіг і безпечно застосувати:**
+```bash
+nginx -T 2>/dev/null | grep -nE 'server_name|root|location|fastcgi_pass|alias'  # повний активний конфіг + що де
+ls -la /etc/nginx/sites-enabled/ /etc/nginx/conf.d/                               # файли конфігів
+cp -a /etc/nginx/sites-enabled/default /root/backups/nginx-default.bak            # БЕКАП перед зміною
+# після правки — ОБОВ'ЯЗКОВО перевірка синтаксису, тоді м'який reload:
+nginx -t && systemctl reload nginx        # (або: nginx -s reload) — без розриву з'єднань
+```
+> **Критично:** `nginx -t` ДО reload. Поганий конфіг → nginx не перезавантажиться → мертвий сайт → мінус бали.
+
+### 9a. Заборонити виконання PHP у теці завантажень (замість Apache `.htaccess`)
+**Коли:** залив webshell через upload ([§2](#2-upload-без-перевірки)) і код правити ніколи.
+```nginx
+# у server{}: для теки завантажень — віддавати файли як статику, НЕ віддавати в PHP-FPM
+location ^~ /uploads/ {
+    location ~ \.php$ { deny all; return 403; }   # будь-який .php у /uploads/ → 403
+}
+```
+**Перевірка:** `curl http://127.0.0.1/uploads/s.php?c=id` → 403 (не виконується); нормальне фото з `/uploads/` віддається.
+
+### 9b. PHP-FPM: закрити «jpg → php» (path-info RCE) ⭐ часта nginx-помилка
+**Як зайшов:** завантажив `shell.jpg` (пройшов перевірку типу), а потім відкрив `/uploads/shell.jpg/x.php` — nginx з «жадібним» `location ~ \.php$` + `cgi.fix_pathinfo=1` віддав **jpg у FPM як PHP** → RCE.
+**Патч (дві частини):**
+```nginx
+# у location, що віддає PHP у FPM — переконатись, що ФАЙЛ реально існує:
+location ~ \.php$ {
+    try_files $uri =404;                 # ← ключове: немає такого .php файлу → 404 (не віддавати в FPM)
+    include fastcgi_params;
+    fastcgi_pass unix:/run/php/php-fpm.sock;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+}
+```
+```ini
+; /etc/php/*/fpm/php.ini  — прибрати інтерпретацію «зайвого» шляху після імені файлу:
+cgi.fix_pathinfo=0
+```
+Застосувати: `nginx -t && systemctl reload nginx` + `systemctl reload php*-fpm`.
+**Перевірка:** `/uploads/shell.jpg/x.php` → 404 (не виконується); звичайні `.php`-сторінки сайту працюють.
+**Пастка:** `try_files $uri =404` у php-location — найважливіший рядок; без нього fix_pathinfo=0 не завжди рятує. Переконайся, що легітимні сторінки (напр. `index.php`) ще відкриваються.
+
+### 9c. Прибрати лістинг директорій
+**Як зайшов:** `autoindex on` показував файли (бекапи/конфіги/прапорці) у теці без index-файлу.
+```nginx
+# у server{} або location{}:
+autoindex off;
+```
+**Перевірка:** відкриття теки без index → 403 (не список файлів).
+
+### 9d. Alias path traversal (нетиповий, але буває)
+**Як зайшов:** `location /img { alias /var/www/images/; }` **без слешів** → `/img../etc/passwd` виходив за межі теки.
+```nginx
+# ДО (вразливо): location /img { alias /var/www/images/; }
+# ПІСЛЯ: слеш і в location, і в alias (або використати root):
+location /img/ { alias /var/www/images/; }
+```
+**Перевірка:** `/img/pic.png` віддається; `/img../` → не читає чужі файли.
+
+### 9e. Сховати чутливі файли (.git / .env / бекапи)
+**Як зайшов:** `http://site/.git/`, `/.env`, `/config.php.bak` віддавались як статика → витік сорсів/кредів.
+```nginx
+# у server{}:
+location ~ /\.(?!well-known) { deny all; }                 # усі dotfiles (.git/.env/.htpasswd...)
+location ~* \.(bak|old|save|swp|sql|zip|tar|gz|~)$ { deny all; }   # бекапи/дампи
+```
+**Перевірка:** `curl http://127.0.0.1/.git/config` → 403; `curl http://127.0.0.1/config.php.bak` → 403; сайт працює.
+**Пастка:** `(?!well-known)` лишає доступ до `/.well-known/` (ACME/сертифікати) — не ламає TLS-оновлення.
+
+**Джерело (nginx):** офіц. docs https://nginx.org/en/docs/ · HackTricks nginx misconfig https://book.hacktricks.wiki/en/network-services-pentesting/pentesting-web/nginx.html
 
 ## Загальна перевірка після веб-патчу
 ```bash

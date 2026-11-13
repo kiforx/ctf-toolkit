@@ -21,7 +21,8 @@
 | Вектор | Мінімальний патч | Перевірка | Деталі |
 |---|---|---|---|
 | Webshell | `rm /var/www/html/uploads/s.php` (лише шел!) | `curl .../s.php?c=id` → 404 | [01](01-web.md#1-webshell-залитий-файл) |
-| Upload | whitelist розширень у коді / `.htaccess` `php_admin_flag engine off` у uploads | `.php` відхилено, `.jpg` ок | [01](01-web.md#2-upload-без-перевірки) |
+| Upload | whitelist розширень у коді; **Apache** `.htaccess` `php_admin_flag engine off`; **nginx** `location ~ \.php$ {deny all}` у uploads | `.php` відхилено, `.jpg` ок | [01](01-web.md#2-upload-без-перевірки) |
+| **Nginx** (веб-сервер) | uploads→deny .php; **jpg→php RCE**: `try_files $uri =404`+`cgi.fix_pathinfo=0`; `autoindex off`; alias-слеші; deny `.git`/`.env`/`.bak` → `nginx -t && reload` | `/uploads/x.jpg/y.php`→404; `/.git/`→403 | [01](01-web.md#9-nginx-патчі-рівня-веб-сервера) |
 | LFI | `basename()`+whitelist; `allow_url_include=Off` | `?file=../../etc/passwd` → ні | [01](01-web.md#3-lfi--path-traversal) |
 | Cmd injection | `escapeshellarg()` + валідація формату | `?ip=1;id` → без RCE | [01](01-web.md#4-command-injection) |
 | SQLi | prepared statements; `REVOKE FILE`, `secure_file_priv` | `' OR 1=1--` → ні | [01](01-web.md#5-sql-injection) |
